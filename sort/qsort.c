@@ -160,12 +160,11 @@ int partition(int T[], int deb, int fin)
 }
 
 void parallel_qsort_sort_bis(int T[],int debut,int fin){
-    if(debut<fin)
-        {
+    if(debut<fin){
         int pivot=partition(T,debut,fin);
         parallel_qsort_sort_bis(T,debut,pivot-1);
         parallel_qsort_sort_bis(T,pivot+1,fin);
-        }
+    }
 }
 
 
@@ -173,32 +172,28 @@ void parallel_qsort_sort (int *T, const int size){
     parallel_qsort_sort_bis(T,0,size-1);
 }
 
-int partition1(int T[], int deb, int fin)
-{
+int partition1(int T[], int deb, int fin){
+
     int compt=deb;
     int pivot=T[deb];
     int i;
-
-    for(i=deb+1;i<=fin;i++)
-        {
-        if(T[i]<pivot)
-            {
-            compt++;
-            echanger(T,compt,i);
-            }
-        }
+    #pragma omp parallel for schedule (dynamic)
+      for(i=deb+1;i<=fin;i++){
+          if(T[i]<pivot){
+              compt++;
+              echanger(T,compt,i);
+          }
+      }
     echanger(T,compt,deb);
     return(compt);
 }
 
 void parallel_qsort_sort1_bis(int T[],int debut,int fin){
-    if(debut<fin)
-        {
+    if(debut<fin){
         int pivot=partition(T,debut,fin);
-        #pragma omp parallel{
-          parallel_qsort_sort_bis(T,debut,pivot-1);
-          parallel_qsort_sort_bis(T,pivot+1,fin);
-        }
+        parallel_qsort_sort_bis(T,debut,pivot-1);
+        parallel_qsort_sort_bis(T,pivot+1,fin);
+    }
 }
 
 void parallel_qsort_sort1 (int *T, const int size)
