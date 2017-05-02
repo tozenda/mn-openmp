@@ -1,4 +1,4 @@
-BINARIES=  mntest_saxpy mntest_daxpy mntest2 mntest2dyn cblastest1 cblastest2 cblastest3 mntest3 mntest3dyn
+BINARIES=  mntest_saxpy mntest_daxpy mntest_scopy mntest_dcopy
 
 all: $(BINARIES)
 
@@ -30,6 +30,13 @@ mntest_saxpy: mntest_saxpy.o $(LIB_DIR)/libmnblas.a
 mntest_daxpy: mntest_daxpy.o $(LIB_DIR)/libmnblas.a
 	gcc -o mntest_daxpy mntest_daxpy.o $(OPTIONS_LINK_STATIC)
 
+mntest_scopy: mntest_scopy.o $(LIB_DIR)/libmnblas.a
+	gcc -o mntest_scopy mntest_scopy.o $(OPTIONS_LINK_STATIC)
+
+mntest_dcopy: mntest_dcopy.o $(LIB_DIR)/libmnblas.a
+	gcc -o mntest_dcopy mntest_dcopy.o $(OPTIONS_LINK_STATIC)
+
+
 #mntest1dyn: mntest1.o $(LIB_DIR)/libmnblasdyn.so
 	#gcc -o mntest1dyn mntest1.o $(OPTIONS_LINK_DYN)
 
@@ -59,6 +66,12 @@ mntest_saxpy.o: mntest_saxpy.c
 
 mntest_daxpy.o: mntest_daxpy.c
 	gcc $(OPTIONS_COMPIL) -c mntest_daxpy.c
+
+mntest_scopy.o: mntest_scopy.c
+	gcc $(OPTIONS_COMPIL) -c mntest_scopy.c
+
+mntest_dcopy.o: mntest_dcopy.c
+	gcc $(OPTIONS_COMPIL) -c mntest_dcopy.c
 
 mntest2.o: mntest2.c $(INC_DIR)/mnblas.h
 	gcc $(OPTIONS_COMPIL) -c mntest2.c
