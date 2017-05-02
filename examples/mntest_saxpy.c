@@ -51,7 +51,7 @@ void vector_print (vfloat V)
   for (i = 0; i < VECSIZE; i++)
     printf ("%f ", V[i]) ;
   printf ("\n") ;
-  
+
   return ;
 }
 
@@ -61,7 +61,7 @@ int main (int argc, char **argv)
   unsigned long long int residu ;
   unsigned long long int av ;
   int exp ;
-  
+  printf("Comparaison pour AXPY entre CBLAS, notre fonction non parallélisée et notre fonction parallelisée\n");
  /* Calcul du residu de la mesure */
   start = _rdtsc () ;
   end = _rdtsc () ;
@@ -70,40 +70,58 @@ int main (int argc, char **argv)
   for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
     {
       vector_init (vec1, 1.0) ;
-      
+
       start = _rdtsc () ;
 
-         mncblas_scopy (VECSIZE, vec1, 1, vec2, 1) ;
-     
+         cblas_saxpy (VECSIZE, 3.0, vec1, 1, vec2, 1) ;
+
       end = _rdtsc () ;
-      
+
       experiments [exp] = end - start ;
     }
-  
+
   av = average (experiments) ;
 
-  printf ("mncblas_scopy: nombre de cycles: \t %Ld \n", av-residu) ;
+  printf ("cblas_saxpy : nombre de cycles: \t %Ld \n", av-residu) ;
+
+
+  for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
+    {
+      vector_init (vec1, 1.0) ;
+
+      start = _rdtsc () ;
+
+         mncblas_saxpy_noomp (VECSIZE, 3.0, vec1, 1, vec2, 1) ;
+
+      end = _rdtsc () ;
+
+      experiments [exp] = end - start ;
+    }
+
+  av = average (experiments) ;
+
+  printf ("mncblas_saxpy_noomp: nombre de cycles: \t %Ld \n", av-residu) ;
 
 
   for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
     {
       vector_init (vec1, 1.0) ;
       vector_init (vec2, 2.0) ;
-      
+
       start = _rdtsc () ;
 
-          mncblas_saxpy (VECSIZE, 3.0, vec1, 1, vec2, 1) ;
-     
+          mncblas_saxpy_omp (VECSIZE, 3.0, vec1, 1, vec2, 1) ;
+
       end = _rdtsc () ;
-      
+
       experiments [exp] = end - start ;
     }
-  
+
   av = average (experiments) ;
 
   // vector_print (vec2) ;
-  printf ("mncblas_saxpy: nombre de cycles: \t %Ld \n", av-residu) ;
-  
+  printf ("mncblas_saxpy_omp: nombre de cycles: \t %Ld \n", av-residu) ;
 
-  
+
+
 }
