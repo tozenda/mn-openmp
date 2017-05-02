@@ -6,8 +6,8 @@
 #define NBEXPERIMENTS    7
 static long long unsigned int experiments [NBEXPERIMENTS] ;
 
-/* 
-  bubble sort -- sequential, parallel -- 
+/*
+  bubble sort -- sequential, parallel --
 */
 
 static   unsigned int N ;
@@ -58,7 +58,7 @@ void print_array (array_int T)
 int is_sorted (array_int T)
 {
   register int i ;
-  
+
   for (i = 1 ; i < N ; i++)
     {
       if (T[i-1] > T [i])
@@ -67,19 +67,53 @@ int is_sorted (array_int T)
   return 1 ;
 }
 
+// nous permet de permuter les éléments du tableau
+void echanger(int t[], int a, int b)
+{
+    int temp = t[a];
+    t[a] = t[b];
+    t[b] = temp;
+}
+
 void sequential_bubble_sort (int *T, const int size)
 {
-    /* TODO: sequential implementation of bubble sort */ 
-
-    
-    return ;
+    // print_array(T);
+    int sorted = 0;
+    int compt = size;
+    while(!sorted)
+    {
+        sorted = 1;
+        for(int i=0 ; i < compt-1 ; i++)
+        {
+            if(T[i] > T[i+1])
+            {
+                echanger(T, i,i+1);
+                sorted = 0;
+            }
+        }
+        compt--;
+    }
 }
 
 void parallel_bubble_sort (int *T, const int size)
 {
-    /* TODO: parallel implementation of bubble sort */
-    
-  return ;
+    int sorted = 0;
+    int compt = size;
+    for(int i=size-1 ; i > 0 ; i--){
+        sorted = 1;
+        // #pragma omp parallel for schedule (dynamic)
+        for(int i=0 ; i < compt-1 ; i++)
+        {
+            if(T[i] > T[i+1])
+            {
+                echanger(T, i,i+1);
+                sorted = 0;
+            }
+        }
+        if (sorted){
+            break;
+        }
+    }
 }
 
 
@@ -101,22 +135,23 @@ int main (int argc, char **argv)
   X = (int *) malloc (N * sizeof(int)) ;
 
   printf("--> Sorting an array of size %u\n",N);
-  
+
   start = _rdtsc () ;
   end   = _rdtsc () ;
   residu = end - start ;
-  
+
 
   for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
     {
       init_array (X) ;
-      
+
       start = _rdtsc () ;
 
          sequential_bubble_sort (X, N) ;
-     
+
       end = _rdtsc () ;
       experiments [exp] = end - start ;
+      // print_array(X);
 
       /* verifying that X is properly sorted */
       if (! is_sorted (X))
@@ -126,18 +161,18 @@ int main (int argc, char **argv)
 	}
     }
 
-  av = average (experiments) ;  
+  av = average (experiments) ;
 
   printf ("\n bubble serial \t\t\t %Ld cycles\n\n", av-residu) ;
 
-  
+
   for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
     {
       init_array (X) ;
       start = _rdtsc () ;
 
           parallel_bubble_sort (X, N) ;
-     
+
       end = _rdtsc () ;
       experiments [exp] = end - start ;
 
@@ -149,10 +184,9 @@ int main (int argc, char **argv)
 	}
     }
 
-  av = average (experiments) ;  
+  av = average (experiments) ;
   printf ("\n bubble parallel \t %Ld cycles\n\n", av-residu) ;
 
-  
   // print_array (X) ;
 
 }

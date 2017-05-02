@@ -40,7 +40,7 @@ void print_array (array_int T)
 int is_sorted (array_int T)
 {
   register int i ;
-  
+
   for (i = 1 ; i < N ; i++)
     {
       if (T[i-1] > T [i])
@@ -62,17 +62,76 @@ long long unsigned int average (long long unsigned int *exps)
   return s / (NBEXPERIMENTS-2) ;
 }
 
+void fusion(int *T,int deb1,int fin1,int fin2)
+        {
+        int *table1;
+        int deb2=fin1+1;
+        int compt1=deb1;
+        int compt2=deb2;
+        int i;
 
+        table1=malloc((fin1-deb1+1)*sizeof(int));
+
+        //on recopie les éléments du début du tableau
+        for(i=deb1;i<=fin1;i++)
+            {
+            table1[i-deb1]=T[i];
+            }
+        for(i=deb1;i<=fin2;i++)
+            {
+            if (compt1==deb2)
+                {
+                break; //tous les éléments ont été classés
+                }
+            else if (compt2==(fin2+1)) //tous les éléments du 2eme tableau ont été utilisés
+                {
+                T[i]=table1[compt1-deb1]; //on ajoute les éléments restants du premier tableau
+                compt1++;
+                }
+            else if (table1[compt1-deb1]<T[compt2])
+                {
+                T[i]=table1[compt1-deb1]; //on ajoute un élément du premier tableau
+                compt1++;
+                }
+            else
+                {
+                T[i]=T[compt2]; //on ajoute un élément du second tableau
+                compt2++;
+                }
+            }
+        free(table1);
+        }
+
+void tri_fusion_bis(int *T,int deb,int fin)
+        {
+        if (deb!=fin)
+            {
+            int milieu=(fin+deb)/2;
+            tri_fusion_bis(T,deb,milieu);
+            tri_fusion_bis(T,milieu+1,fin);
+            fusion(T,deb,milieu,fin);
+            }
+        }
 
 void merge_sort (int *T, const int size)
 {
     /* TODO: sequential version of the merge sort algorithm */
+    {
+    if (size>0){
+        tri_fusion_bis(T,0,size-1);
+        }
+    }
 }
 
 
 void parallel_merge_sort (int *T, const int size)
 {
     /* TODO: sequential version of the merge sort algorithm */
+    {
+    if (size>0){
+        tri_fusion_bis(T,0,size-1);
+        }
+    }
 }
 
 
@@ -92,7 +151,7 @@ int main (int argc, char **argv)
   X = (int *) malloc (N * sizeof(int)) ;
 
   printf("--> Sorting an array of size %u\n",N);
-  
+
   start = _rdtsc () ;
   end   = _rdtsc () ;
   residu = end - start ; 
@@ -105,34 +164,34 @@ int main (int argc, char **argv)
     for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
     {
       init_array (X) ;
-      
+
       start = _rdtsc () ;
 
                merge_sort (X, N) ;
-     
+
       end = _rdtsc () ;
       experiments [exp] = end - start ;
-      
+
       if (! is_sorted (X))
 	{
             fprintf(stderr, "ERROR: the array is not properly sorted\n") ;
             exit (-1) ;
-	}      
+	}
     }
-  
-  av = average (experiments) ;  
+
+  av = average (experiments) ;
   printf ("\n merge sort serial\t\t %Ld cycles\n\n", av-residu) ;
 
   printf("parallel sorting ...\n");
-  
+
   for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
     {
       init_array (X) ;
-      
+
       start = _rdtsc () ;
 
            parallel_merge_sort (X, N) ;
-     
+
       end = _rdtsc () ;
       experiments [exp] = end - start ;
 
@@ -140,11 +199,11 @@ int main (int argc, char **argv)
 	{
             fprintf(stderr, "ERROR: the array is not properly sorted\n") ;
             exit (-1) ;
-	}      
+	}
     }
-  
+
   av = average (experiments) ;
   printf ("\n merge sort parallel with tasks\t %Ld cycles\n\n", av-residu) ;
 
-  
+
 }
