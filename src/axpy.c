@@ -53,7 +53,7 @@ void mncblas_saxpy_omp (const int N, const float alpha, const float *X,const int
 	scalar version with unrolled loop
 	*/
 	register unsigned int i ;
-	#pragma omp for schedule(static)
+	#pragma omp parallel for schedule (static) num_threads (8)
 	for ( i = 0; i < N; i += 4) {
 		Y [i] = alpha * X[i] + Y[i] ;
 		Y [i+1] = alpha * X[i+1] + Y[i+1] ;
@@ -86,7 +86,7 @@ void mncblas_daxpy_omp (const int N, const double alpha, const double *X, const 
 	*/
 	register unsigned int i ;
 
-	#pragma omp for schedule(static)
+	#pragma omp parallel for schedule (static)
 	for ( i = 0; i < N; i += 4) {
 		Y [i] = alpha * X[i] + Y[i] ;
 		Y [i+1] = alpha * X[i+1] + Y[i+1] ;

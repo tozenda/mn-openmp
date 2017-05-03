@@ -61,7 +61,7 @@ int main (int argc, char **argv)
   unsigned long long int residu ;
   unsigned long long int av ;
   int exp ;
-  printf("Comparaison pour COPY entre CBLAS, notre fonction non parallélisée et notre fonction parallelisée\n");
+  printf ("cblas_scopy : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,(((double) VECSIZE) / ((double) (av - residu) * (double) 0.38)));
  /* Calcul du residu de la mesure */
   start = _rdtsc () ;
   end = _rdtsc () ;
@@ -82,7 +82,7 @@ int main (int argc, char **argv)
 
   av = average (experiments) ;
 
-  printf ("cblas_scopy : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,((((double) 2 * (double) VECSIZE * (double) VECSIZE)) / ((double) (av - residu) * (double) 0.38)));
+  printf ("cblas_scopy : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,(((double) VECSIZE) / ((double) (av - residu) * (double) 0.38)));
 
 
   for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
@@ -100,7 +100,7 @@ int main (int argc, char **argv)
 
   av = average (experiments) ;
 
-  printf ("mncblas_scopy_noomp : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,((((double) 2 * (double) VECSIZE * (double) VECSIZE)) / ((double) (av - residu) * (double) 0.38)));
+  printf ("mncblas_dcopy_noomp : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,(((double) VECSIZE) / ((double) (av - residu) * (double) 0.38)));
 
 
   for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
@@ -120,7 +120,7 @@ int main (int argc, char **argv)
   av = average (experiments) ;
 
   // vector_print (vec2) ;
-  printf ("mncblas_scopy_omp : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,((((double) 2 * (double) VECSIZE * (double) VECSIZE)) / ((double) (av - residu) * (double) 0.38)));
+  printf ("mncblas_dcopy_omp : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,(((double) VECSIZE) / ((double) (av - residu) * (double) 0.38)));
 
 
 
