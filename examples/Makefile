@@ -1,4 +1,4 @@
-BINARIES=  mntest_saxpy mntest_daxpy mntest_scopy mntest_dcopy
+BINARIES=  mntest_saxpy mntest_daxpy mntest_scopy mntest_dcopy mntest_sdot mntest_ddot
 
 all: $(BINARIES)
 
@@ -36,6 +36,11 @@ mntest_scopy: mntest_scopy.o $(LIB_DIR)/libmnblas.a
 mntest_dcopy: mntest_dcopy.o $(LIB_DIR)/libmnblas.a
 	gcc -o mntest_dcopy mntest_dcopy.o $(OPTIONS_LINK_STATIC)
 
+mntest_sdot: mntest_sdot.o $(LIB_DIR)/libmnblas.a
+	gcc -o mntest_sdot mntest_sdot.o $(OPTIONS_LINK_STATIC)
+
+mntest_ddot: mntest_ddot.o $(LIB_DIR)/libmnblas.a
+	gcc -o mntest_ddot mntest_ddot.o $(OPTIONS_LINK_STATIC)
 
 #mntest1dyn: mntest1.o $(LIB_DIR)/libmnblasdyn.so
 	#gcc -o mntest1dyn mntest1.o $(OPTIONS_LINK_DYN)
@@ -72,6 +77,13 @@ mntest_scopy.o: mntest_scopy.c
 
 mntest_dcopy.o: mntest_dcopy.c
 	gcc $(OPTIONS_COMPIL) -c mntest_dcopy.c
+
+mntest_sdot.o: mntest_sdot.c
+	gcc $(OPTIONS_COMPIL) -c mntest_sdot.c
+
+mntest_ddot.o: mntest_ddot.c
+	gcc $(OPTIONS_COMPIL) -c mntest_ddot.c
+
 
 mntest2.o: mntest2.c $(INC_DIR)/mnblas.h
 	gcc $(OPTIONS_COMPIL) -c mntest2.c

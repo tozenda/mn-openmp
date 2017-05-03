@@ -6,6 +6,7 @@
 /*
   Mesure des cycles
 */
+
 #include <x86intrin.h>
 
 #define NBEXPERIMENTS    102
@@ -15,9 +16,9 @@ static long long unsigned int experiments [NBEXPERIMENTS] ;
 #define VECSIZE    1048576
 
 typedef float vfloat  [VECSIZE] __attribute__ ((aligned (16))) ;
-typedef float vdouble [VECSIZE] __attribute__ ((aligned (16))) ;
+typedef double vdouble [VECSIZE] __attribute__ ((aligned (16))) ;
 
-vfloat vec1, vec2 ;
+vdouble vec1, vec2 ;
 
 long long unsigned int average (long long unsigned int *exps)
 {
@@ -33,7 +34,7 @@ long long unsigned int average (long long unsigned int *exps)
 }
 
 
-void vector_init (vfloat V, float x)
+void vector_init (vdouble V, double x)
 {
   register unsigned int i ;
 
@@ -43,7 +44,7 @@ void vector_init (vfloat V, float x)
   return ;
 }
 
-void vector_print (vfloat V)
+void vector_print (vdouble V)
 {
   register unsigned int i ;
 
@@ -60,7 +61,7 @@ int main (int argc, char **argv)
   unsigned long long int residu ;
   unsigned long long int av ;
   int exp ;
-  printf("Comparaison pour AXPY entre CBLAS, notre fonction non parallélisée et notre fonction parallelisée\n");
+  printf("Comparaison pour DDOT entre CBLAS, notre fonction non parallélisée et notre fonction parallelisée\n");
  /* Calcul du residu de la mesure */
   start = _rdtsc () ;
   end = _rdtsc () ;
@@ -72,7 +73,7 @@ int main (int argc, char **argv)
 
       start = _rdtsc () ;
 
-         cblas_saxpy (VECSIZE, 3.0, vec1, 1, vec2, 1) ;
+         cblas_ddot (VECSIZE, vec1, 1, vec2, 1) ;
 
       end = _rdtsc () ;
 
@@ -81,7 +82,7 @@ int main (int argc, char **argv)
 
   av = average (experiments) ;
 
-  printf ("cblas_saxpy : nombre de cycles: \t %Ld \n", av-residu) ;
+  printf ("cblas_dcopy : nombre de cycles: \t %Ld \n", av-residu) ;
 
 
   for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
@@ -90,7 +91,7 @@ int main (int argc, char **argv)
 
       start = _rdtsc () ;
 
-         mncblas_saxpy_noomp (VECSIZE, 3.0, vec1, 1, vec2, 1) ;
+         mncblas_ddot_noomp (VECSIZE, vec1, 1, vec2, 1) ;
 
       end = _rdtsc () ;
 
@@ -99,7 +100,7 @@ int main (int argc, char **argv)
 
   av = average (experiments) ;
 
-  printf ("mncblas_saxpy_noomp: nombre de cycles: \t %Ld \n", av-residu) ;
+  printf ("mncblas_ddot_noomp: nombre de cycles: \t %Ld \n", av-residu) ;
 
 
   for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
@@ -109,7 +110,7 @@ int main (int argc, char **argv)
 
       start = _rdtsc () ;
 
-          mncblas_saxpy_omp (VECSIZE, 3.0, vec1, 1, vec2, 1) ;
+          mncblas_ddot_omp (VECSIZE, vec1, 1, vec2, 1) ;
 
       end = _rdtsc () ;
 
@@ -119,7 +120,7 @@ int main (int argc, char **argv)
   av = average (experiments) ;
 
   // vector_print (vec2) ;
-  printf ("mncblas_saxpy_omp: nombre de cycles: \t %Ld \n", av-residu) ;
+  printf ("mncblas_ddot_omp: nombre de cycles: \t %Ld \n", av-residu) ;
 
 
 
