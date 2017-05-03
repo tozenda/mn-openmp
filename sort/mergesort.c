@@ -62,56 +62,48 @@ long long unsigned int average (long long unsigned int *exps)
   return s / (NBEXPERIMENTS-2) ;
 }
 
-void fusion(int *T,int deb1,int fin1,int fin2)
-        {
-        int *table1;
-        int deb2=fin1+1;
-        int compt1=deb1;
-        int compt2=deb2;
-        int i;
+void fusion(int *T,int deb1,int fin1,int fin2){
+    int *table1;
+    int deb2=fin1+1;
+    int compt1=deb1;
+    int compt2=deb2;
+    int i;
 
-        table1=malloc((fin1-deb1+1)*sizeof(int));
+    table1=malloc((fin1-deb1+1)*sizeof(int));
 
-        //on recopie les éléments du début du tableau
-        for(i=deb1;i<=fin1;i++)
-            {
-            table1[i-deb1]=T[i];
-            }
-        for(i=deb1;i<=fin2;i++)
-            {
-            if (compt1==deb2)
-                {
-                break; //tous les éléments ont été classés
-                }
-            else if (compt2==(fin2+1)) //tous les éléments du 2eme tableau ont été utilisés
-                {
-                T[i]=table1[compt1-deb1]; //on ajoute les éléments restants du premier tableau
-                compt1++;
-                }
-            else if (table1[compt1-deb1]<T[compt2])
-                {
-                T[i]=table1[compt1-deb1]; //on ajoute un élément du premier tableau
-                compt1++;
-                }
-            else
-                {
-                T[i]=T[compt2]; //on ajoute un élément du second tableau
-                compt2++;
-                }
-            }
-        free(table1);
+    //on recopie les éléments du début du tableau
+    for(i=deb1;i<=fin1;i++){
+        table1[i-deb1]=T[i];
+    }
+
+    for(i=deb1;i<=fin2;i++){
+        if (compt1==deb2){
+            break; //tous les éléments ont été classés
         }
-
-void tri_fusion_bis(int *T,int deb,int fin)
-        {
-        if (deb!=fin)
-            {
-            int milieu=(fin+deb)/2;
-            tri_fusion_bis(T,deb,milieu);
-            tri_fusion_bis(T,milieu+1,fin);
-            fusion(T,deb,milieu,fin);
-            }
+        else if (compt2==(fin2+1)){ //tous les éléments du 2eme tableau ont été utilisés
+            T[i]=table1[compt1-deb1]; //on ajoute les éléments restants du premier tableau
+                compt1++;
         }
+        else if (table1[compt1-deb1]<T[compt2]){
+            T[i]=table1[compt1-deb1]; //on ajoute un élément du premier tableau
+            compt1++;
+        }
+        else{
+            T[i]=T[compt2]; //on ajoute un élément du second tableau
+            compt2++;
+        }
+    }
+    free(table1);
+}
+
+void tri_fusion_bis(int *T,int deb,int fin){
+    if (deb!=fin){
+        int milieu=(fin+deb)/2;
+        tri_fusion_bis(T,deb,milieu);
+        tri_fusion_bis(T,milieu+1,fin);
+        fusion(T,deb,milieu,fin);
+    }
+}
 
 void merge_sort (int *T, const int size)
 {
@@ -123,13 +115,57 @@ void merge_sort (int *T, const int size)
     }
 }
 
+void fusion1(int *T,int deb1,int fin1,int fin2){
+    int *table1;
+    int deb2=fin1+1;
+    int compt1=deb1;
+    int compt2=deb2;
+    int i;
+
+    table1=malloc((fin1-deb1+1)*sizeof(int));
+
+    //on recopie les éléments du début du tableau
+    //#pragma omp parallel for schedule (static)
+    for(i=deb1;i<=fin1;i++){
+        table1[i-deb1]=T[i];
+    }
+
+    for(i=deb1;i<=fin2;i++){
+        if (compt1==deb2){
+            break; //tous les éléments ont été classés
+        }
+        else if (compt2==(fin2+1)){ //tous les éléments du 2eme tableau ont été utilisés
+            T[i]=table1[compt1-deb1]; //on ajoute les éléments restants du premier tableau
+                compt1++;
+        }
+        else if (table1[compt1-deb1]<T[compt2]){
+            T[i]=table1[compt1-deb1]; //on ajoute un élément du premier tableau
+            compt1++;
+        }
+        else{
+            T[i]=T[compt2]; //on ajoute un élément du second tableau
+            compt2++;
+        }
+    }
+    free(table1);
+}
+
+void tri_fusion_bis1(int *T,int deb,int fin){
+    if (deb!=fin){
+        int milieu=(fin+deb)/2;
+        tri_fusion_bis1(T,deb,milieu);
+        tri_fusion_bis1(T,milieu+1,fin);
+        fusion1(T,deb,milieu,fin);
+    }
+}
+
 
 void parallel_merge_sort (int *T, const int size)
 {
     /* TODO: sequential version of the merge sort algorithm */
     {
     if (size>0){
-        tri_fusion_bis(T,0,size-1);
+        tri_fusion_bis1(T,0,size-1);
         }
     }
 }

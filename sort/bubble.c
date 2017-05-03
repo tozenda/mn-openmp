@@ -78,42 +78,77 @@ void echanger(int t[], int a, int b)
 void sequential_bubble_sort (int *T, const int size)
 {
     // print_array(T);
-    int sorted = 0;
-    int compt = size;
-    while(!sorted)
-    {
-        sorted = 1;
-        for(int i=0 ; i < compt-1 ; i++)
-        {
-            if(T[i] > T[i+1])
-            {
-                echanger(T, i,i+1);
-                sorted = 0;
+    // int sorted = 0;
+    // int compt = size;
+    // while(!sorted)
+    // {
+    //     sorted = 1;
+    //     for(int i=0 ; i < compt-1 ; i++)
+    //     {
+    //         if(T[i] > T[i+1])
+    //         {
+    //             echanger(T, i,i+1);
+    //             sorted = 0;
+    //         }
+    //     }
+    //     compt--;
+    // }
+    for (int j = 0; j < size; j++){
+        if(j%2==0){
+            for (int i = 0; i < (size/2); ++i){
+                if (T[2*i] > T[2*i+1]){
+                    echanger(T, 2*i, 2*i+1);
+                }
             }
         }
-        compt--;
+        else{
+            for (int i = 0; i < (size/2)-1; ++i){
+                if (T[2*i+1] > T[2*i+2]){
+                    echanger(T,2*i+1, 2*i+2);
+                }
+            }
+        }
     }
 }
 
 void parallel_bubble_sort (int *T, const int size)
 {
-    int sorted = 0;
-    int compt = size;
-    for(int i=size-1 ; i > 0 ; i--){
-        sorted = 1;
-        // #pragma omp parallel for schedule (dynamic)
-        for(int i=0 ; i < compt-1 ; i++)
-        {
-            if(T[i] > T[i+1])
-            {
-                echanger(T, i,i+1);
-                sorted = 0;
+    // int sorted = 0;
+    // int compt = size;
+    // for(int i=size-1 ; i > 0 ; i--){
+    //     sorted = 1;
+    //     // #pragma omp parallel for schedule (dynamic)
+    //     for(int i=0 ; i < compt-1 ; i++)
+    //     {
+    //         if(T[i] > T[i+1])
+    //         {
+    //             echanger(T, i,i+1);
+    //             sorted = 0;
+    //         }
+    //     }
+    //     if (sorted){
+    //         break;
+    //     }
+    // }
+    for (int j = 0; j < size; j++){
+        if(j%2==0){
+            #pragma omp parallel for
+            for (int i = 0; i < (size/2); ++i){
+                if (T[2*i] > T[2*i+1]){
+                    echanger(T, 2*i, 2*i+1);
+                }
             }
         }
-        if (sorted){
-            break;
+        else{
+            #pragma omp parallel for
+            for (int i = 0; i < (size/2)-1; ++i){
+                if (T[2*i+1] > T[2*i+2]){
+                    echanger(T,2*i+1, 2*i+2);
+                }
+            }
         }
     }
+    //print_array(T);
 }
 
 
