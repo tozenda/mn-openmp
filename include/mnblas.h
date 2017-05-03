@@ -17,7 +17,27 @@ void mncblas_scopy (
 	float *Y, const int incY
 ) ;
 
+void mncblas_scopy_noomp (
+	const int N, const float *X, const int incX,
+	float *Y, const int incY
+) ;
+
+void mncblas_scopy_omp (
+	const int N, const float *X, const int incX,
+	float *Y, const int incY
+) ;
+
 void mncblas_dcopy (
+	const int N, const double *X, const int incX,
+	double *Y, const int incY
+) ;
+
+void mncblas_dcopy_noomp (
+	const int N, const double *X, const int incX,
+	double *Y, const int incY
+) ;
+
+void mncblas_dcopy_omp (
 	const int N, const double *X, const int incX,
 	double *Y, const int incY
 ) ;
@@ -81,13 +101,27 @@ BEGIN BLAS1 DOT
 */
 
 float  mncblas_sdot (
-	const int N, const float  *X, const int incX,
-	const float  *Y, const int incY
+	const int N, const float  *X, const int incX,const float  *Y, const int incY
+) ;
+
+float  mncblas_sdot_noomp (
+	const int N, const float  *X, const int incX,const float  *Y, const int incY
+) ;
+
+float  mncblas_sdot_omp (
+	const int N, const float  *X, const int incX,const float  *Y, const int incY
 ) ;
 
 double mncblas_ddot (
-	const int N, const double *X, const int incX,
-	const double *Y, const int incY
+	const int N, const double *X, const int incX, const double *Y, const int incY
+) ;
+
+double mncblas_ddot_noomp(
+	const int N, const double *X, const int incX, const double *Y, const int incY
+) ;
+
+double mncblas_ddot_omp(
+	const int N, const double *X, const int incX, const double *Y, const int incY
 ) ;
 
 void   mncblas_cdotu_sub (
