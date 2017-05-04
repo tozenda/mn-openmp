@@ -229,7 +229,15 @@ BEGIN BLAS2 GEMV
 
 */
 
-void mncblas_sgemv (
+void mncblas_sgemv_noomp (
+	const MNCBLAS_LAYOUT layout,
+	const MNCBLAS_TRANSPOSE TransA, const int M, const int N,
+	const float alpha, const float *A, const int lda,
+	const float *X, const int incX, const float beta,
+	float *Y, const int incY
+) ;
+
+void mncblas_sgemv_omp (
 	const MNCBLAS_LAYOUT layout,
 	const MNCBLAS_TRANSPOSE TransA, const int M, const int N,
 	const float alpha, const float *A, const int lda,

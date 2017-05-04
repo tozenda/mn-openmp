@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
-
 #include "mnblas.h"
+#include <cblas.h>
 
 /*
   Mesure des cycles
@@ -14,11 +14,11 @@ static long long unsigned int experiments [NBEXPERIMENTS] ;
 
 #define VECSIZE    512
 
-typedef float mfloat  [VECSIZE] [VECSIZE]  __attribute__ ((aligned (16))) ;
-typedef float mdouble [VECSIZE] [VECSIZE]  __attribute__ ((aligned (16))) ;
+typedef float mfloat  [VECSIZE] [VECSIZE] ;
+typedef float mdouble [VECSIZE] [VECSIZE] ;
 
-typedef float vfloat  [VECSIZE]  __attribute__ ((aligned (16))) ;
-typedef float vdouble [VECSIZE]  __attribute__ ((aligned (16))) ;
+typedef float vfloat  [VECSIZE] ;
+typedef float vdouble [VECSIZE] ;
 
 mfloat A ;
 vfloat X, Y ;
@@ -89,7 +89,7 @@ void vector_float_print (vfloat V)
   for (i = 0; i < VECSIZE; i++)
     printf ("%f ", V[i]) ;
   printf ("\n") ;
-  
+
   return ;
 }
 
@@ -100,7 +100,7 @@ void vector_double_print (vdouble V)
   for (i = 0; i < VECSIZE; i++)
     printf ("%f ", V[i]) ;
   printf ("\n") ;
-  
+
   return ;
 }
 
@@ -108,7 +108,7 @@ void matrix_float_print (mfloat M)
 {
   register unsigned int i ;
   register unsigned int j ;
-  
+
 
   for (i = 0; i < VECSIZE; i++)
     {
@@ -117,7 +117,7 @@ void matrix_float_print (mfloat M)
       printf ("\n") ;
     }
   printf ("\n") ;
-  
+
   return ;
 }
 
@@ -125,7 +125,7 @@ void matrix_double_print (mdouble M)
 {
   register unsigned int i ;
   register unsigned int j ;
-  
+
 
   for (i = 0; i < VECSIZE; i++)
     {
@@ -134,7 +134,7 @@ void matrix_double_print (mdouble M)
       printf ("\n") ;
     }
   printf ("\n") ;
-  
+
   return ;
 }
 
@@ -144,14 +144,14 @@ int main (int argc, char **argv)
  unsigned long long start, end ;
  unsigned long long residu ;
  unsigned long long int av ;
- 
+
  int exp ;
 
  /* Calcul du residu de la mesure */
   start = _rdtsc () ;
   end = _rdtsc () ;
-  residu = end - start ;  
-  
+  residu = end - start ;
+
   for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
     {
       vector_float_init (X, 1.0) ;
@@ -159,20 +159,53 @@ int main (int argc, char **argv)
       matrix_float_init (A, 3.0) ;
 
       start = _rdtsc () ;
-	  
-          mncblas_sgemv  (MNCblasRowMajor, MNCblasNoTrans, VECSIZE, VECSIZE, 1.0,
-			  (float *) A, VECSIZE, (float *) X, 1, 1.0, (float *) Y, 1) ;
-	  
+
+         cblas_sgemv  (CblasRowMajor, CblasNoTrans, VECSIZE, VECSIZE, 1.0,(float *) A, VECSIZE, (float *) X, 1, 1.0, (float *) Y, 1) ;
+
       end = _rdtsc () ;
-      experiments [exp] = end - start ;	  
+      experiments [exp] = end - start ;
     }
 
   av = average (experiments) ;
 
-  printf ("mncblas_sgemv: nombre de cycles: \t\t %Ld \n", av-residu) ;
-  // vector_float_print (Y) ;
+  printf ("cblas_sgemv : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,((((double) 4 * (double) VECSIZE) + ((double) 2 * (double) VECSIZE * (double) VECSIZE)) / ((double) (av - residu) * (double) 0.17)));
 
- 
-  return 0 ;
 
+  for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
+    {
+      vector_float_init (X, 1.0) ;
+      vector_float_init (Y, 2.0) ;
+      matrix_float_init (A, 3.0) ;
+
+      start = _rdtsc () ;
+
+      mncblas_sgemv_noomp(CblasRowMajor, CblasNoTrans, VECSIZE, VECSIZE, 1.0,
+			  (float *) A, VECSIZE, (float *) X, 1, 1.0, (float *) Y, 1) ;
+      end = _rdtsc () ;
+      experiments [exp] = end - start ;
+    }
+
+  av = average (experiments) ;
+
+  printf ("mncblas_sgemv_noomp : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,((((double) 4 * (double) VECSIZE) + ((double) 2 * (double) VECSIZE * (double) VECSIZE)) / ((double) (av - residu) * (double) 0.17)));
+
+
+  for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
+    {
+      vector_float_init (X, 1.0) ;
+      vector_float_init (Y, 2.0) ;
+      matrix_float_init (A, 3.0) ;
+
+      start = _rdtsc () ;
+
+         mncblas_sgemv_omp(CblasRowMajor, CblasNoTrans, VECSIZE, VECSIZE, 1.0,
+			  (float *) A, VECSIZE, (float *) X, 1, 1.0, (float *) Y, 1) ;
+      end = _rdtsc () ;
+      experiments [exp] = end - start ;
+    }
+
+  av = average (experiments) ;
+
+  // vector_print (vec2) ;
+  printf ("mncblas_sgemv_omp : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,((((double) 4 * (double) VECSIZE) + ((double) 2 * (double) VECSIZE * (double) VECSIZE)) / ((double) (av - residu) * (double) 0.17)));
 }
