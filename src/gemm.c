@@ -50,7 +50,7 @@ void mncblas_sgemm_1 (
 		#pragma omp parallel for schedule(static)
 		for (i = 0 ; i < M; i = i + 1)
 		{
-			#pragma omp parallel for schedule(static)
+			#pragma omp parallel for schedule(static) private(av4, bv4, dot)
 			for (j = 0 ; j < M; j ++)
 			{
 
@@ -93,7 +93,7 @@ void mncblas_sgemm_1 (
 		#pragma omp parallel for schedule(static)
 		for (i = 0 ; i < M; i = i + 1)
 		{
-			#pragma omp parallel for schedule(static)
+			#pragma omp parallel for schedule(static) private(av4, bv4, dot)
 			for (j = 0 ; j < M; j ++)
 			{
 
@@ -323,9 +323,11 @@ void mncblas_dgemm_1 (
 	{
 		Bcol = aligned_alloc (16, M * sizeof (double)) ;
 
+		#pragma omp parallel for schedule(static)
 		for (i = 0 ; i < M; i = i + 1)
 		{
 
+			#pragma omp parallel for schedule(static) private(av4, bv4, dot)
 			for (j = 0 ; j < M; j ++)
 			{
 
@@ -363,9 +365,10 @@ void mncblas_dgemm_1 (
 	}
 	else
 	{
+		#pragma omp parallel for schedule(static)
 		for (i = 0 ; i < M; i = i + 1)
 		{
-
+			#pragma omp parallel for schedule(static) private(av4, bv4, dot)
 			for (j = 0 ; j < M; j ++)
 			{
 
@@ -482,7 +485,7 @@ void mncblas_dgemm_omp(MNCBLAS_LAYOUT layout, MNCBLAS_TRANSPOSE TransA,
 	register unsigned int j ;
 	register unsigned int k ;
 	register double r ;
-	#pragma omp parallel for schedule(static)
+	#pragma omp parallel for schedule(static) private(r)
 	for (i = 0 ; i < M; i = i + 4)
 	{
 		/* i */
@@ -490,7 +493,7 @@ void mncblas_dgemm_omp(MNCBLAS_LAYOUT layout, MNCBLAS_TRANSPOSE TransA,
 		for (j = 0 ; j < M; j ++)
 		{
 			r = 0.0 ;
-			#pragma omp parallel for schedule(static)
+			// #pragma omp parallel for schedule(static)
 			for (k = 0; k < M; k=k+4)
 			{
 				r = r + A [(i * M) + k    ] * B [(k * M)       + j] ;
@@ -506,7 +509,7 @@ void mncblas_dgemm_omp(MNCBLAS_LAYOUT layout, MNCBLAS_TRANSPOSE TransA,
 		for (j = 0 ; j < M; j ++)
 		{
 			r = 0.0 ;
-			#pragma omp parallel for schedule(static)
+			// #pragma omp parallel for schedule(static)
 			for (k = 0; k < M; k=k+4)
 			{
 		 		r = r + A [((i + 1) * M) + k    ] * B [(k * M)     + j] ;
@@ -522,7 +525,7 @@ void mncblas_dgemm_omp(MNCBLAS_LAYOUT layout, MNCBLAS_TRANSPOSE TransA,
 		for (j = 0 ; j < M; j ++)
 		{
 			r = 0.0 ;
-			#pragma omp parallel for schedule(static)
+			// #pragma omp parallel for schedule(static)
 			for (k = 0; k < M; k = k + 4)
 			{
 				r = r + A [((i + 2) * M) + k    ] * B [(k * M)     + j] ;
@@ -538,7 +541,7 @@ void mncblas_dgemm_omp(MNCBLAS_LAYOUT layout, MNCBLAS_TRANSPOSE TransA,
 		for (j = 0 ; j < M; j ++)
 		{
 			r = 0.0 ;
-			#pragma omp parallel for schedule(static)
+			// #pragma omp parallel for schedule(static)
 			for (k = 0; k < M; k = k + 4)
 			{
 				r = r + A [((i + 3) * M) + k    ] * B [(k * M)     + j] ;
