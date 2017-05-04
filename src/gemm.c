@@ -11,7 +11,7 @@ typedef float *floatM;
 
 
 typedef float float4 [4]  __attribute__ ((aligned (16))) ;
-typedef double double4 [4] __attribute__ ((aligned (16))) ;
+typedef double double2 [2] __attribute__ ((aligned (16))) ;
 
 void mncblas_sgemm_1 (
 	MNCBLAS_LAYOUT layout, MNCBLAS_TRANSPOSE TransA,
@@ -309,78 +309,76 @@ void mncblas_dgemm_1 (
 
 	register double r ;
 	double *Bcol ;
-	double4 *R4 ;
+	double2 R2 ;
 	int      err ;
 
-	__m128d av4 ;
-	__m128d bv4 ;
+	__m128d av2 ;
+	__m128d bv2 ;
 	__m128d dot ;
 
 	/*
 	Bcol = (floatM) malloc (M * sizeof (double)) ;
 	err = posix_memalign ((void **) &Bcol, 16, M*sizeof(double)) ;
 	*/
-	printf("variable init ok\n");
+	//printf("variable init ok\n");
 	if (TransB == MNCblasNoTrans)
 	{
-		printf("On rentre dans if1\n");
+		//printf("On rentre dans if1\n");
 		Bcol = aligned_alloc (16, M * sizeof (double)) ;
 
-		// #pragma omp parallel for schedule(static)
+		#pragma omp parallel for schedule(static) private(i,j,k,l,av2, bv2, dot, R2,r,indice_ligne)
 		for (i = 0 ; i < M; i = i + 1)
 		{
-			printf("On rentre dans for1 itération %d\n", i);
+			//printf("On rentre dans for1 itération %d\n", i);
 
 			// #pragma omp parallel for schedule(static) private(av4, bv4, dot)
+
 			for (j = 0 ; j < M; j ++)
 			{
-				printf("on rentre dans for 2 itération %d\n", j);
+				//printf("on rentre dans for 2 itération %d\n", j);
 
 
 				/*
 				load a B column (j)
 				*/
-
 				for (l = 0 ; l < M ; l = l + 4){
 				Bcol [l]     = B [l        * M + j ] ;
 				Bcol [l + 1] = B [(l + 1)  * M + j ] ;
 				Bcol [l + 2] = B [(l + 2)  * M + j ] ;
 				Bcol [l + 3] = B [(l + 3)  * M + j ] ;
 				}
-				printf("ok A\n");
+				//printf("ok A\n");
 				r = 0.0 ;
 				indice_ligne = i * M ;
-
 				for (k = 0; k < M; k = k + 2)
 				{
-					printf("On rentre dans for3 it %d\n", k);
+					//printf("On rentre dans for3 it %d\n", k);
 
-					av4 = _mm_load_pd (A+indice_ligne + k);
-					printf("point a-1\n");
-					bv4 = _mm_load_pd (Bcol+ k) ;
-					printf("point a-2\n");
+					av2 = _mm_load_pd (A+indice_ligne + k);
+					//printf("point a-1\n");
+					bv2 = _mm_load_pd (Bcol+ k) ;
+					//printf("point a-2\n");
 
-					dot = _mm_dp_pd (av4, bv4, 0xFF) ;
-					printf("point a-3\n");
+					dot = _mm_dp_pd (av2, bv2, 0xFF) ;
+					//printf("point a-3\n");
 
-					_mm_store_pd (R4, dot) ;
-					printf("point a-4\n");
+					_mm_store_pd (R2, dot) ;
+					//printf("point a-4\n");
 
-					r = r + R4 [0] ;
-					printf("point a-5\n");
+					r = r + R2 [0] ;
+					//printf("point a-5\n");
 				}
-				printf("ok B\n");
+				//printf("ok B\n");
 				C [indice_ligne + j] = (alpha * r) + (beta * C [indice_ligne + j]) ;
 			}
 		}
 	}
 	else
 	{
-		printf("On rentre dans else\n");
-		#pragma omp parallel for schedule(static)
+		//printf("On rentre dans else\n");
+		#pragma omp parallel for schedule(static) private(i,j,k,l,av2, bv2, dot, R2,r,indice_ligne)
 		for (i = 0 ; i < M; i = i + 1)
 		{
-			#pragma omp parallel for schedule(static) private(av4, bv4, dot)
 			for (j = 0 ; j < M; j ++)
 			{
 
@@ -390,14 +388,14 @@ void mncblas_dgemm_1 (
 				for (k = 0; k < M; k = k + 2)
 				{
 
-					av4 = _mm_load_pd (A + indice_ligne + k);
-					bv4 = _mm_load_pd (B + indice_ligne + k) ;
+					av2 = _mm_load_pd (A + indice_ligne + k);
+					bv2 = _mm_load_pd (B + indice_ligne + k) ;
 
-					dot = _mm_dp_pd (av4, bv4, 0xFF) ;
+					dot = _mm_dp_pd (av2, bv2, 0xFF) ;
 
-					_mm_store_pd (R4, dot) ;
+					_mm_store_pd (R2, dot) ;
 
-					r = r + R4 [0] ;
+					r = r + R2 [0] ;
 				}
 
 				C [indice_ligne + j] = (alpha * r) + (beta * C [indice_ligne + j]) ;
@@ -412,7 +410,7 @@ void mncblas_dgemm_noomp(MNCBLAS_LAYOUT layout, MNCBLAS_TRANSPOSE TransA,
 	const int K, const double alpha, const double *A,
 	const int lda, const double *B, const int ldb,
 	const double beta, double *C, const int ldc)
-	{
+{
 	/*
 	scalar implementation
 	*/

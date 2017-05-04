@@ -1,4 +1,4 @@
-BINARIES= mntest_saxpy mntest_daxpy mntest_scopy mntest_dcopy mntest_sdot mntest_ddot mntest_sgemm mntest_dgemm mntest_sswap mntest_dswap mntest_sgemv mntest_dgemv clean_o
+BINARIES= mntest_saxpy mntest_daxpy mntest_scopy mntest_dcopy mntest_sdot mntest_ddot mntest_sgemm mntest_dgemm mntest_sswap mntest_dswap mntest_sgemv mntest_dgemv
 
 all: $(BINARIES)
 
