@@ -253,8 +253,23 @@ END BLAS2 GEMV
 BEGIN BLAS3 GEMM
 
 */
+void mncblas_sgemm_1 (
+	MNCBLAS_LAYOUT layout, MNCBLAS_TRANSPOSE TransA,
+	MNCBLAS_TRANSPOSE TransB, const int M, const int N,
+	const int K, const float alpha, const float *A,
+	const int lda, const float *B, const int ldb,
+	const float beta, float *C, const int ldc
+);
 
-void mncblas_sgemm (
+void mncblas_sgemm_omp (
+	MNCBLAS_LAYOUT layout, MNCBLAS_TRANSPOSE TransA,
+	MNCBLAS_TRANSPOSE TransB, const int M, const int N,
+	const int K, const float alpha, const float *A,
+	const int lda, const float *B, const int ldb,
+	const float beta, float *C, const int ldc
+) ;
+
+void mncblas_sgemm_noomp (
 	MNCBLAS_LAYOUT layout, MNCBLAS_TRANSPOSE TransA,
 	MNCBLAS_TRANSPOSE TransB, const int M, const int N,
 	const int K, const float alpha, const float *A,
@@ -263,7 +278,23 @@ void mncblas_sgemm (
 ) ;
 
 
-void mncblas_dgemm (
+void mncblas_dgemm_1 (
+	MNCBLAS_LAYOUT layout, MNCBLAS_TRANSPOSE TransA,
+	MNCBLAS_TRANSPOSE TransB, const int M, const int N,
+	const int K, const double alpha, const double *A,
+	const int lda, const double *B, const int ldb,
+	const double beta, double *C, const int ldc
+) ;
+
+void mncblas_dgemm_omp (
+	MNCBLAS_LAYOUT layout, MNCBLAS_TRANSPOSE TransA,
+	MNCBLAS_TRANSPOSE TransB, const int M, const int N,
+	const int K, const double alpha, const double *A,
+	const int lda, const double *B, const int ldb,
+	const double beta, double *C, const int ldc
+) ;
+
+void mncblas_dgemm_noomp (
 	MNCBLAS_LAYOUT layout, MNCBLAS_TRANSPOSE TransA,
 	MNCBLAS_TRANSPOSE TransB, const int M, const int N,
 	const int K, const double alpha, const double *A,
