@@ -33,7 +33,7 @@ void mncblas_sswap_omp(const int N, float *X, const int incX, float *Y, const in
 {
   register unsigned int i;
   register float save ;
-  #pragma omp parallel for schedule (static) num_threads (8)
+  #pragma omp for schedule(static) private (save)
   for (i=0;i < N;i += incX)
   {
     save = Y [i] ;
@@ -58,7 +58,7 @@ void mncblas_dswap_omp(const int N, double *X, const int incX,double *Y, const i
 {
   register unsigned int i;
   register double save ;
-  #pragma omp parallel for schedule (static) num_threads (8)
+  #pragma omp parallel for schedule (static) private(save)
   for (i=0;i < N;i += incX)
   {
     save = Y [i] ;

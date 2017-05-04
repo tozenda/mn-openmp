@@ -253,6 +253,21 @@ void mncblas_dgemv (
 	double *Y, const int incY
 ) ;
 
+void mncblas_dgemv_noomp (
+	MNCBLAS_LAYOUT layout,
+	MNCBLAS_TRANSPOSE TransA, const int M, const int N,
+	const double alpha, const double *A, const int lda,
+	const double *X, const int incX, const double beta,
+	double *Y, const int incY
+) ;
+
+void mncblas_dgemv_omp (
+	MNCBLAS_LAYOUT layout,
+	MNCBLAS_TRANSPOSE TransA, const int M, const int N,
+	const double alpha, const double *A, const int lda,
+	const double *X, const int incX, const double beta,
+	double *Y, const int incY
+) ;
 void mncblas_cgemv (
 	MNCBLAS_LAYOUT layout,
 	MNCBLAS_TRANSPOSE TransA, const int M, const int N,
