@@ -177,13 +177,13 @@ int partition1(int T[], int deb, int fin){
     int compt=deb;
     int pivot=T[deb];
     int i;
-    #pragma omp parallel for schedule (dynamic)
-      for(i=deb+1;i<=fin;i++){
-          if(T[i]<pivot){
-              compt++;
-              echanger(T,compt,i);
-          }
+    #pragma omp parallel for schedule (static)
+    for(i=deb+1;i<=fin;i++){
+      if(T[i]<pivot){
+        compt++;
+        echanger(T,compt,i);
       }
+    }
     echanger(T,compt,deb);
     return(compt);
 }

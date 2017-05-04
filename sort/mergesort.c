@@ -125,7 +125,7 @@ void fusion1(int *T,int deb1,int fin1,int fin2){
     table1=malloc((fin1-deb1+1)*sizeof(int));
 
     //on recopie les éléments du début du tableau
-    //#pragma omp parallel for schedule (static)
+    #pragma omp parallel for schedule (static)
     for(i=deb1;i<=fin1;i++){
         table1[i-deb1]=T[i];
     }

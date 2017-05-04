@@ -67,14 +67,68 @@ void mncblas_dswap_omp(const int N, double *X, const int incX,double *Y, const i
   }
 }
 
-void mncblas_cswap(const int N, void *X, const int incX,void *Y, const int incY)
+void mncblas_cswap_noomp(const int N, void *X, const int incX,void *Y, const int incY)
 {
+  register unsigned int i;
+  register float save ;
 
-  return ;
+  float *x = (float *)X;
+  float *y = (float *)Y;
+
+  for (i=0;i < N;i += incX)
+  {
+    save = y [i] ;
+    y [i] = x [i] ;
+    x [i] = save ;
+  }
 }
 
-void mncblas_zswap(const int N, void *X, const int incX,void *Y, const int incY)
+void mncblas_cswap_omp(const int N, void *X, const int incX,void *Y, const int incY)
 {
+  register unsigned int i;
+  register float save ;
 
-  return ;
+  float *x = (float *)X;
+  float *y = (float *)Y;
+
+  #pragma omp for schedule(static) private (save)
+  for (i=0;i < N;i += incX)
+  {
+    save = y [i] ;
+    y [i] = x [i] ;
+    x [i] = save ;
+  }
+}
+
+void mncblas_zswap_noomp(const int N, void *X, const int incX,void *Y, const int incY)
+{
+  register unsigned int i;
+  register double save ;
+
+  double *x = (double *)X;
+  double *y = (double *)Y;
+
+  for (i=0;i < N;i += incX)
+  {
+    save = y [i] ;
+    y [i] = x [i] ;
+    x [i] = save ;
+  }
+}
+
+void mncblas_zswap_omp(const int N, void *X, const int incX,void *Y, const int incY)
+{
+  register unsigned int i;
+  register double save ;
+
+  double *x = (double *)X;
+  double *y = (double *)Y;
+
+  #pragma omp for schedule(static) private (save)
+  for (i=0;i < N;i += incX)
+  {
+    save = y [i] ;
+    y [i] = x [i] ;
+    x [i] = save ;
+  }
 }
