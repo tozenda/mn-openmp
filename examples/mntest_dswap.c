@@ -2,6 +2,7 @@
 #include <cblas.h>
 
 #include "mnblas.h"
+#include <cblas.h>
 
 /*
   Mesure des cycles

@@ -2,6 +2,7 @@
 #include <cblas.h>
 
 #include "mnblas.h"
+#include <cblas.h>
 
 /*
   Mesure des cycles
@@ -10,7 +11,7 @@
 #include <x86intrin.h>
 
 #define NBEXPERIMENTS    102
-static long long unsigned int experiments [NBEXPERIMENTS] ;
+static long long unsigned int experiments [NBEXPERIMENTS] ; 
 
 // #define VECSIZE    32
 #define VECSIZE    1048576

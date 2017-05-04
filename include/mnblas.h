@@ -97,12 +97,22 @@ void mncblas_dswap_omp (
 	double *Y, const int incY
 ) ;
 
-void mncblas_cswap (
+void mncblas_cswap_omp (
 	const int N, void *X, const int incX,
 	void *Y, const int incY
 ) ;
 
-void mncblas_zswap (
+void mncblas_cswap_noomp (
+	const int N, void *X, const int incX,
+	void *Y, const int incY
+) ;
+
+void mncblas_zswap_omp (
+	const int N, void *X, const int incX,
+	void *Y, const int incY
+) ;
+
+void mncblas_zswap_noomp (
 	const int N, void *X, const int incX,
 	void *Y, const int incY
 ) ;
