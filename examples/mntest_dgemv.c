@@ -208,4 +208,23 @@ int main (int argc, char **argv)
 
   // vector_print (vec2) ;
   printf ("mncblas_dgemv_omp : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,((((double) 4 * (double) VECSIZE) + ((double) 2 * (double) VECSIZE * (double) VECSIZE)) / ((double) (av - residu) * (double) 0.17)));
+
+  for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
+    {
+      vector_double_init (X, 1.0) ;
+      vector_double_init (Y, 2.0) ;
+      matrix_double_init (A, 3.0) ;
+
+      start = _rdtsc () ;
+
+         mncblas_dgemv_vec(CblasRowMajor, CblasNoTrans, VECSIZE, VECSIZE, 1.0,
+        (double *) A, VECSIZE, (double *) X, 1, 1.0, (double *) Y, 1) ;
+      end = _rdtsc () ;
+      experiments [exp] = end - start ;
+    }
+
+  av = average (experiments) ;
+
+  // vector_print (vec2) ;
+  printf ("mncblas_dgemv_vec : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,((((double) 4 * (double) VECSIZE) + ((double) 2 * (double) VECSIZE * (double) VECSIZE)) / ((double) (av - residu) * (double) 0.17)));
 }
