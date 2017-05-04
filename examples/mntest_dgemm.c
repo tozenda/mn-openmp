@@ -60,7 +60,7 @@ int main (int argc, char **argv)
   unsigned long long int residu ;
   unsigned long long int av ;
   int exp ;
-  printf("Comparaison pour GEMM entre CBLAS, notre fonction non parallélisée et notre fonction parallelisée\n");
+  printf("Comparaison pour GEMM entre CBLAS, notre fonction non parallélisée, parallélisée et notre fonction parallelisée\n");
  /* Calcul du residu de la mesure */
   start = _rdtsc () ;
   end = _rdtsc () ;
@@ -72,7 +72,7 @@ int main (int argc, char **argv)
 
       start = _rdtsc () ;
 
-         cblas_sgemm (VECSIZE, 3.0, vec1, 1, vec2, 1) ;
+         cblas_dgemm (VECSIZE, 3.0, vec1, 1, vec2, 1) ;
 
       end = _rdtsc () ;
 
@@ -81,7 +81,7 @@ int main (int argc, char **argv)
 
   av = average (experiments) ;
 
-  printf ("cblas_sgemm : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,(((double) 8 * (double) VECSIZE) / ((double) (av - residu) * (double) 0.38)));
+  printf ("cblas_dgemm : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,(((double) 8 * (double) VECSIZE) / ((double) (av - residu) * (double) 0.38)));
 
 
   for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
@@ -90,7 +90,7 @@ int main (int argc, char **argv)
 
       start = _rdtsc () ;
 
-         mncblas_sgemm_noomp (VECSIZE, 3.0, vec1, 1, vec2, 1) ;
+         mncblas_dgemm_noomp (VECSIZE, 3.0, vec1, 1, vec2, 1) ;
 
       end = _rdtsc () ;
 
@@ -99,7 +99,7 @@ int main (int argc, char **argv)
 
   av = average (experiments) ;
 
-  printf ("mncblas_sgemm_noomp : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,(((double) 8 * (double) VECSIZE) / ((double) (av - residu) * (double) 0.38)));
+  printf ("mncblas_dgemm_noomp : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,(((double) 8 * (double) VECSIZE) / ((double) (av - residu) * (double) 0.38)));
 
 
   for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
@@ -109,7 +109,7 @@ int main (int argc, char **argv)
 
       start = _rdtsc () ;
 
-          mncblas_sgemm_omp (VECSIZE, 3.0, vec1, 1, vec2, 1) ;
+          mncblas_dgemm_omp (VECSIZE, 3.0, vec1, 1, vec2, 1) ;
 
       end = _rdtsc () ;
 
@@ -119,7 +119,7 @@ int main (int argc, char **argv)
   av = average (experiments) ;
 
   // vector_print (vec2) ;
-  printf ("mncblas_sgemm_omp : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,(((double) 8 * (double) VECSIZE) / ((double) (av - residu) * (double) 0.38)));
+  printf ("mncblas_dgemm_omp : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,(((double) 8 * (double) VECSIZE) / ((double) (av - residu) * (double) 0.38)));
 
   for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
     {
@@ -128,7 +128,7 @@ int main (int argc, char **argv)
 
       start = _rdtsc () ;
 
-          mncblas_sgemm_1 (VECSIZE, 3.0, vec1, 1, vec2, 1) ;
+          mncblas_dgemm_1 (VECSIZE, 3.0, vec1, 1, vec2, 1) ;
 
       end = _rdtsc () ;
 
@@ -138,6 +138,6 @@ int main (int argc, char **argv)
   av = average (experiments) ;
 
   // vector_print (vec2) ;
-  printf ("mncblas_sgemm_1 (vectorisé) : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,(((double) 8 * (double) VECSIZE) / ((double) (av - residu) * (double) 0.38)));
+  printf ("mncblas_dgemm_1 (vectorisé) : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,(((double) 8 * (double) VECSIZE) / ((double) (av - residu) * (double) 0.38)));
 
 }
