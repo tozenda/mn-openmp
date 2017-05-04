@@ -74,10 +74,10 @@ void mncblas_sgemv_omp (const MNCBLAS_LAYOUT layout,const MNCBLAS_TRANSPOSE Tran
 	register float r ;
 	register float x ;
 	register unsigned int indice ;
-	#pragma omp parallel for schedule(static)
+	r = 0.0 ;
+	#pragma omp parallel for schedule(static) private(r)
 	for (i = 0; i < M; i += incX)
 	{
-		r = 0.0 ;
 		x = X [i] ;
 		indice = i * M ;
 		for (j = 0 ; j < M; j += incY)
@@ -148,10 +148,10 @@ void mncblas_dgemv_omp (MNCBLAS_LAYOUT layout,MNCBLAS_TRANSPOSE TransA, const in
 	register float r ;
 	register float x ;
 	register unsigned int indice ;
-	#pragma omp parallel for schedule(static)
+	r = 0.0 ;
+	#pragma omp parallel for schedule(static) private(r)
 	for (i = 0; i < M; i += incX)
 	{
-		r = 0.0 ;
 		x = X [i] ;
 		indice = i * M ;
 		for (j = 0 ; j < M; j += incY)
