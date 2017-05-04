@@ -8,6 +8,7 @@
 
 typedef float *floatM;
 
+
 typedef float float4 [4]  __attribute__ ((aligned (16))) ;
 
 void mncblas_sgemm_1 (

@@ -1,23 +1,24 @@
 #include <stdio.h>
-#include <cblas.h>
+#include <string.h>
 
 #include "mnblas.h"
 
 /*
   Mesure des cycles
 */
+
 #include <x86intrin.h>
 
-#define NBEXPERIMENTS    102
+#define NBEXPERIMENTS    252
 static long long unsigned int experiments [NBEXPERIMENTS] ;
 
-// #define VECSIZE    32
-#define VECSIZE    1048576
+#define MSIZE    256
 
-typedef float vfloat  [VECSIZE] __attribute__ ((aligned (16))) ;
-typedef float vdouble [VECSIZE] __attribute__ ((aligned (16))) ;
+typedef float mfloat  [MSIZE] [MSIZE]  __attribute__ ((aligned (16))) ;
 
-vfloat vec1, vec2 ;
+typedef double mdouble [MSIZE] [MSIZE]  __attribute__ ((aligned (16))) ;
+
+mfloat A, B, C ;
 
 long long unsigned int average (long long unsigned int *exps)
 {
@@ -32,23 +33,62 @@ long long unsigned int average (long long unsigned int *exps)
   return s / (NBEXPERIMENTS-2) ;
 }
 
-
-void vector_init (vfloat V, float x)
+void matrix_float_init (mfloat M, float x)
 {
   register unsigned int i ;
+  register unsigned int j ;
 
-  for (i = 0; i < VECSIZE; i++)
-    V [i] = x ;
+  for (i = 0; i < MSIZE; i++)
+      for (j = 0; j < MSIZE; j++)
+  if (i > j)
+    M [i][j] = x ;
+  else
+    M [i][j] = -x ;
 
   return ;
 }
 
-void vector_print (vfloat V)
+void matrix_double_init (mdouble M, double x)
 {
   register unsigned int i ;
+  register unsigned int j ;
 
-  for (i = 0; i < VECSIZE; i++)
-    printf ("%f ", V[i]) ;
+  for (i = 0; i < MSIZE; i++)
+      for (j = 0; j < MSIZE; j++)
+  M [i][j] = x ;
+
+  return ;
+}
+
+void matrix_float_print (mfloat M)
+{
+  register unsigned int i ;
+  register unsigned int j ;
+
+
+  for (i = 0; i < MSIZE; i++)
+    {
+      for (j = 0 ; j < MSIZE; j++)
+  printf ("%3.2f ", M[i][j]) ;
+      printf ("\n") ;
+    }
+  printf ("\n") ;
+
+  return ;
+}
+
+void matrix_double_print (mdouble M)
+{
+  register unsigned int i ;
+  register unsigned int j ;
+
+
+  for (i = 0; i < MSIZE; i++)
+    {
+      for (j = 0 ; j < MSIZE; j++)
+  printf ("%3.2f ", M[i][j]) ;
+      printf ("\n") ;
+    }
   printf ("\n") ;
 
   return ;
@@ -68,11 +108,17 @@ int main (int argc, char **argv)
 
   for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
     {
-      vector_init (vec1, 1.0) ;
+      matrix_float_init (A, 1.0) ;
+      matrix_float_init (B, 2.0) ;
+      matrix_float_init (C, 3.0) ;
 
       start = _rdtsc () ;
 
-         cblas_sgemm (VECSIZE, 3.0, vec1, 1, vec2, 1) ;
+         cblas_sgemm  (
+       MNCblasRowMajor, MNCblasNoTrans,  MNCblasNoTrans,
+       MSIZE, MSIZE, MSIZE, 1.0, (float *) A, MSIZE,
+       (float *) B, MSIZE, 1.0, (float *) C, MSIZE
+            ) ;
 
       end = _rdtsc () ;
 
@@ -81,16 +127,22 @@ int main (int argc, char **argv)
 
   av = average (experiments) ;
 
-  printf ("cblas_sgemm : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,(((double) 8 * (double) VECSIZE) / ((double) (av - residu) * (double) 0.38)));
+  printf ("cblas_sgemm : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,(((double) 8 * (double) MSIZE) / ((double) (av - residu) * (double) 0.38)));
 
 
   for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
     {
-      vector_init (vec1, 1.0) ;
+      matrix_float_init (A, 1.0) ;
+      matrix_float_init (B, 2.0) ;
+      matrix_float_init (C, 3.0) ;
 
       start = _rdtsc () ;
 
-         mncblas_sgemm_noomp (VECSIZE, 3.0, vec1, 1, vec2, 1) ;
+         mncblas_sgemm_noomp  (
+       MNCblasRowMajor, MNCblasNoTrans,  MNCblasNoTrans,
+       MSIZE, MSIZE, MSIZE, 1.0, (float *) A, MSIZE,
+       (float *) B, MSIZE, 1.0, (float *) C, MSIZE
+            ) ;
 
       end = _rdtsc () ;
 
@@ -99,17 +151,22 @@ int main (int argc, char **argv)
 
   av = average (experiments) ;
 
-  printf ("mncblas_sgemm_noomp : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,(((double) 8 * (double) VECSIZE) / ((double) (av - residu) * (double) 0.38)));
+  printf ("mncblas_sgemm_noomp : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,(((double) 8 * (double) MSIZE) / ((double) (av - residu) * (double) 0.38)));
 
 
   for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
     {
-      vector_init (vec1, 1.0) ;
-      vector_init (vec2, 2.0) ;
+      matrix_float_init (A, 1.0) ;
+      matrix_float_init (B, 2.0) ;
+      matrix_float_init (C, 3.0) ;
 
       start = _rdtsc () ;
 
-          mncblas_sgemm_omp (VECSIZE, 3.0, vec1, 1, vec2, 1) ;
+          mncblas_sgemm_omp  (
+       MNCblasRowMajor, MNCblasNoTrans,  MNCblasNoTrans,
+       MSIZE, MSIZE, MSIZE, 1.0, (float *) A, MSIZE,
+       (float *) B, MSIZE, 1.0, (float *) C, MSIZE
+            ) ;
 
       end = _rdtsc () ;
 
@@ -119,16 +176,21 @@ int main (int argc, char **argv)
   av = average (experiments) ;
 
   // vector_print (vec2) ;
-  printf ("mncblas_sgemm_omp : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,(((double) 8 * (double) VECSIZE) / ((double) (av - residu) * (double) 0.38)));
+  printf ("mncblas_sgemm_omp : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,(((double) 8 * (double) MSIZE) / ((double) (av - residu) * (double) 0.38)));
 
   for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
     {
-      vector_init (vec1, 1.0) ;
-      vector_init (vec2, 2.0) ;
+      matrix_float_init (A, 1.0) ;
+      matrix_float_init (B, 2.0) ;
+      matrix_float_init (C, 3.0) ;
 
       start = _rdtsc () ;
 
-          mncblas_sgemm_1 (VECSIZE, 3.0, vec1, 1, vec2, 1) ;
+          mncblas_sgemm_1  (
+       MNCblasRowMajor, MNCblasNoTrans,  MNCblasNoTrans,
+       MSIZE, MSIZE, MSIZE, 1.0, (float *) A, MSIZE,
+       (float *) B, MSIZE, 1.0, (float *) C, MSIZE
+            ) ;
 
       end = _rdtsc () ;
 
@@ -138,6 +200,6 @@ int main (int argc, char **argv)
   av = average (experiments) ;
 
   // vector_print (vec2) ;
-  printf ("mncblas_sgemm_1 (vectorisé) : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,(((double) 8 * (double) VECSIZE) / ((double) (av - residu) * (double) 0.38)));
+  printf ("mncblas_sgemm_1 (vectorisé) : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,(((double) 8 * (double) MSIZE) / ((double) (av - residu) * (double) 0.38)));
 
 }
