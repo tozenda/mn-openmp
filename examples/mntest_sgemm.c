@@ -9,7 +9,7 @@
 
 #include <x86intrin.h>
 
-#define NBEXPERIMENTS    252
+#define NBEXPERIMENTS    52
 static long long unsigned int experiments [NBEXPERIMENTS] ;
 
 #define MSIZE    256

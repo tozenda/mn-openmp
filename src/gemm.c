@@ -47,10 +47,10 @@ void mncblas_sgemm_1 (
 	if (TransB == MNCblasNoTrans)
 	{
 		Bcol = aligned_alloc (16, M * sizeof (float)) ;
-
+		#pragma omp parallel for schedule(static)
 		for (i = 0 ; i < M; i = i + 1)
 		{
-
+			#pragma omp parallel for schedule(static)
 			for (j = 0 ; j < M; j ++)
 			{
 
@@ -58,7 +58,7 @@ void mncblas_sgemm_1 (
 				/*
 				load a B column (j)
 				*/
-
+				// #pragma omp parallel for schedule(static)
 				for (l = 0 ; l < M ; l = l + 4)
 				{
 					Bcol [l]     = B [l        * M + j ] ;
@@ -69,7 +69,7 @@ void mncblas_sgemm_1 (
 
 				r = 0.0 ;
 				indice_ligne = i * M ;
-
+				// #pragma omp parallel for schedule(static)
 				for (k = 0; k < M; k = k + 4)
 				{
 
@@ -88,16 +88,18 @@ void mncblas_sgemm_1 (
 		}
 	}
 	else
+		// on fait 5/4 * M**3 opérations
 	{
+		#pragma omp parallel for schedule(static)
 		for (i = 0 ; i < M; i = i + 1)
 		{
-
+			#pragma omp parallel for schedule(static)
 			for (j = 0 ; j < M; j ++)
 			{
 
 				r = 0.0 ;
 				indice_ligne = i * M ;
-
+				// #pragma omp parallel for schedule(static)
 				for (k = 0; k < M; k = k + 4)
 				{
 
@@ -213,7 +215,7 @@ void mncblas_sgemm_omp (
 	register unsigned int j ;
 	register unsigned int k ;
 	register float r ;
-	#pragma omp parallel for schedule(static)
+	#pragma omp parallel for schedule(static) private(r)
 	for (i = 0 ; i < M; i = i + 4)
 	{
 		/* i */
@@ -221,7 +223,7 @@ void mncblas_sgemm_omp (
 		for (j = 0 ; j < M; j ++)
 		{
 			r = 0.0 ;
-			#pragma omp parallel for schedule(static)
+			//#pragma omp parallel for schedule(static)
 			for (k = 0; k < M; k=k+4)
 			{
 				r = r + A [(i * M) + k    ] * B [(k * M)       + j] ;
@@ -237,7 +239,7 @@ void mncblas_sgemm_omp (
 		for (j = 0 ; j < M; j ++)
 		{
 			r = 0.0 ;
-			#pragma omp parallel for schedule(static)
+			// #pragma omp parallel for schedule(static)
 			for (k = 0; k < M; k=k+4)
 			{
 		 		r = r + A [((i + 1) * M) + k    ] * B [(k * M)     + j] ;
@@ -253,7 +255,7 @@ void mncblas_sgemm_omp (
 		for (j = 0 ; j < M; j ++)
 		{
 			r = 0.0 ;
-			#pragma omp parallel for schedule(static)
+			// #pragma omp parallel for schedule(static)
 			for (k = 0; k < M; k = k + 4)
 			{
 				r = r + A [((i + 2) * M) + k    ] * B [(k * M)     + j] ;
@@ -269,7 +271,7 @@ void mncblas_sgemm_omp (
 		for (j = 0 ; j < M; j ++)
 		{
 			r = 0.0 ;
-			#pragma omp parallel for schedule(static)
+			// #pragma omp parallel for schedule(static)
 			for (k = 0; k < M; k = k + 4)
 			{
 				r = r + A [((i + 3) * M) + k    ] * B [(k * M)     + j] ;
@@ -332,13 +334,14 @@ void mncblas_dgemm_1 (
 				load a B column (j)
 				*/
 
-				for (l = 0 ; l < M ; l = l + 2)
-				{
-					Bcol [l]     = B [l        * M + j ] ;
-					Bcol [l + 1] = B [(l + 1)  * M + j ] ;
+				for (l = 0 ; l < M ; l = l + 4){
+				Bcol [l]     = B [l        * M + j ] ;
+				Bcol [l + 1] = B [(l + 1)  * M + j ] ;
+				Bcol [l + 2] = B [(l + 2)  * M + j ] ;
+				Bcol [l + 3] = B [(l + 3)  * M + j ] ;
 				}
 
-				r = 0 ;
+				r = 0.0 ;
 				indice_ligne = i * M ;
 
 				for (k = 0; k < M; k = k + 2)
