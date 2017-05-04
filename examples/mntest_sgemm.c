@@ -2,6 +2,7 @@
 #include <string.h>
 
 #include "mnblas.h"
+#include <cblas.h>
 
 /*
   Mesure des cycles
@@ -127,7 +128,7 @@ int main (int argc, char **argv)
 
   av = average (experiments) ;
 
-  printf ("cblas_sgemm : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,(((double) 8 * (double) MSIZE) / ((double) (av - residu) * (double) 0.38)));
+  printf ("cblas_sgemm : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,(((double) MSIZE * (double) MSIZE * (double) MSIZE) / ((double) (av - residu) * (double) 0.17)));
 
 
   for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
@@ -151,7 +152,7 @@ int main (int argc, char **argv)
 
   av = average (experiments) ;
 
-  printf ("mncblas_sgemm_noomp : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,(((double) 8 * (double) MSIZE) / ((double) (av - residu) * (double) 0.38)));
+  printf ("mncblas_sgemm_noomp : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,(((double) MSIZE * (double) MSIZE * (double) MSIZE) / ((double) (av - residu) * (double) 0.17)));
 
 
   for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
@@ -176,7 +177,7 @@ int main (int argc, char **argv)
   av = average (experiments) ;
 
   // vector_print (vec2) ;
-  printf ("mncblas_sgemm_omp : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,(((double) 8 * (double) MSIZE) / ((double) (av - residu) * (double) 0.38)));
+  printf ("mncblas_sgemm_omp : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,(((double) MSIZE * (double) MSIZE * (double) MSIZE) / ((double) (av - residu) * (double) 0.17)));
 
   for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
     {
@@ -200,6 +201,6 @@ int main (int argc, char **argv)
   av = average (experiments) ;
 
   // vector_print (vec2) ;
-  printf ("mncblas_sgemm_1 (vectorisé) : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,(((double) 8 * (double) MSIZE) / ((double) (av - residu) * (double) 0.38)));
+  printf ("mncblas_sgemm_1 (vectorisé) : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,(((double) MSIZE * (double) MSIZE * (double) MSIZE) / ((double) (av - residu) * (double) 0.17)));
 
 }
