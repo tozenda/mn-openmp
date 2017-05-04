@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <cblas.h>
+
 #include "mnblas.h"
 
 /*
@@ -15,9 +16,9 @@ static long long unsigned int experiments [NBEXPERIMENTS] ;
 #define VECSIZE    1048576
 
 typedef float vfloat  [VECSIZE] __attribute__ ((aligned (16))) ;
-typedef float vdouble [VECSIZE] __attribute__ ((aligned (16))) ;
+typedef double vdouble [VECSIZE] __attribute__ ((aligned (16))) ;
 
-vfloat vec1, vec2 ;
+vdouble vec1, vec2 ;
 
 long long unsigned int average (long long unsigned int *exps)
 {
@@ -33,7 +34,7 @@ long long unsigned int average (long long unsigned int *exps)
 }
 
 
-void vector_init (vfloat V, float x)
+void vector_init (vdouble V, double x)
 {
   register unsigned int i ;
 
@@ -43,7 +44,7 @@ void vector_init (vfloat V, float x)
   return ;
 }
 
-void vector_print (vfloat V)
+void vector_print (vdouble V)
 {
   register unsigned int i ;
 
@@ -60,7 +61,7 @@ int main (int argc, char **argv)
   unsigned long long int residu ;
   unsigned long long int av ;
   int exp ;
-  printf("Comparaison pour DOT entre CBLAS, notre fonction non parallélisée et notre fonction parallelisée\n");
+  printf("Comparaison pour DSWAP entre CBLAS, notre fonction non parallélisée et notre fonction parallelisée\n");
  /* Calcul du residu de la mesure */
   start = _rdtsc () ;
   end = _rdtsc () ;
@@ -72,7 +73,7 @@ int main (int argc, char **argv)
 
       start = _rdtsc () ;
 
-         cblas_sdot (VECSIZE, vec1, 1, vec2, 1) ;
+         cblas_dswap (VECSIZE, vec1, 1, vec2, 1) ;
 
       end = _rdtsc () ;
 
@@ -81,7 +82,7 @@ int main (int argc, char **argv)
 
   av = average (experiments) ;
 
-  printf ("cblas_sdot : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,((((double) 2 * (double) VECSIZE)) / ((double) (av - residu) * (double) 0.17)));
+  printf ("cblas_dswap : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,((((double) VECSIZE)) / ((double) (av - residu) * (double) 0.17)));
 
 
   for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
@@ -90,7 +91,7 @@ int main (int argc, char **argv)
 
       start = _rdtsc () ;
 
-         mncblas_sdot_noomp (VECSIZE, vec1, 1, vec2, 1) ;
+         mncblas_dswap_noomp (VECSIZE, vec1, 1, vec2, 1) ;
 
       end = _rdtsc () ;
 
@@ -99,7 +100,7 @@ int main (int argc, char **argv)
 
   av = average (experiments) ;
 
-  printf ("mncblas_sdot_noomp : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,((((double) 2 * (double) VECSIZE)) / ((double) (av - residu) * (double) 0.17)));
+  printf ("mncblas_dswap_noomp : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,((((double) VECSIZE)) / ((double) (av - residu) * (double) 0.17)));
 
 
   for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
@@ -109,7 +110,7 @@ int main (int argc, char **argv)
 
       start = _rdtsc () ;
 
-          mncblas_sdot_omp (VECSIZE, vec1, 1, vec2, 1) ;
+          mncblas_dswap_omp (VECSIZE, vec1, 1, vec2, 1) ;
 
       end = _rdtsc () ;
 
@@ -119,8 +120,6 @@ int main (int argc, char **argv)
   av = average (experiments) ;
 
   // vector_print (vec2) ;
-  printf ("mncblas_sdot_omp : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,((((double) 2 * (double) VECSIZE)) / ((double) (av - residu) * (double) 0.17)));
-
-
+  printf ("mncblas_dswap_omp : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,((((double) VECSIZE)) / ((double) (av - residu) * (double) 0.17)));
 
 }

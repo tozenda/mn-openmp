@@ -72,7 +72,27 @@ void mncblas_sswap (
 	float *Y, const int incY
 ) ;
 
+void mncblas_sswap_noomp (
+	const int N, float *X, const int incX,
+	float *Y, const int incY
+) ;
+
+void mncblas_sswap_omp (
+	const int N, float *X, const int incX,
+	float *Y, const int incY
+) ;
+
 void mncblas_dswap (
+	const int N, double *X, const int incX,
+	double *Y, const int incY
+) ;
+
+void mncblas_dswap_noomp (
+	const int N, double *X, const int incX,
+	double *Y, const int incY
+) ;
+
+void mncblas_dswap_omp (
 	const int N, double *X, const int incX,
 	double *Y, const int incY
 ) ;
@@ -261,6 +281,14 @@ void mncblas_sgemm_1 (
 	const float beta, float *C, const int ldc
 );
 
+void mncblas_sgemm (
+	MNCBLAS_LAYOUT layout, MNCBLAS_TRANSPOSE TransA,
+	MNCBLAS_TRANSPOSE TransB, const int M, const int N,
+	const int K, const float alpha, const float *A,
+	const int lda, const float *B, const int ldb,
+	const float beta, float *C, const int ldc
+) ;
+
 void mncblas_sgemm_omp (
 	MNCBLAS_LAYOUT layout, MNCBLAS_TRANSPOSE TransA,
 	MNCBLAS_TRANSPOSE TransB, const int M, const int N,
@@ -279,6 +307,14 @@ void mncblas_sgemm_noomp (
 
 
 void mncblas_dgemm_1 (
+	MNCBLAS_LAYOUT layout, MNCBLAS_TRANSPOSE TransA,
+	MNCBLAS_TRANSPOSE TransB, const int M, const int N,
+	const int K, const double alpha, const double *A,
+	const int lda, const double *B, const int ldb,
+	const double beta, double *C, const int ldc
+) ;
+
+void mncblas_dgemm (
 	MNCBLAS_LAYOUT layout, MNCBLAS_TRANSPOSE TransA,
 	MNCBLAS_TRANSPOSE TransB, const int M, const int N,
 	const int K, const double alpha, const double *A,
