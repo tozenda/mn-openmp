@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 
 #include "mnblas.h"
 
@@ -10,6 +11,7 @@ typedef float *floatM;
 
 
 typedef float float4 [4]  __attribute__ ((aligned (16))) ;
+typedef double double4 [4] __attribute__ ((aligned (16))) ;
 
 void mncblas_sgemm_1 (
 	MNCBLAS_LAYOUT layout, MNCBLAS_TRANSPOSE TransA,
@@ -307,7 +309,7 @@ void mncblas_dgemm_1 (
 
 	register double r ;
 	double *Bcol ;
-	double *R4 ;
+	double4 *R4 ;
 	int      err ;
 
 	__m128d av4 ;
@@ -318,18 +320,21 @@ void mncblas_dgemm_1 (
 	Bcol = (floatM) malloc (M * sizeof (double)) ;
 	err = posix_memalign ((void **) &Bcol, 16, M*sizeof(double)) ;
 	*/
-
+	printf("variable init ok\n");
 	if (TransB == MNCblasNoTrans)
 	{
+		printf("On rentre dans if1\n");
 		Bcol = aligned_alloc (16, M * sizeof (double)) ;
 
-		#pragma omp parallel for schedule(static)
+		// #pragma omp parallel for schedule(static)
 		for (i = 0 ; i < M; i = i + 1)
 		{
+			printf("On rentre dans for1 itération %d\n", i);
 
-			#pragma omp parallel for schedule(static) private(av4, bv4, dot)
+			// #pragma omp parallel for schedule(static) private(av4, bv4, dot)
 			for (j = 0 ; j < M; j ++)
 			{
+				printf("on rentre dans for 2 itération %d\n", j);
 
 
 				/*
@@ -342,29 +347,36 @@ void mncblas_dgemm_1 (
 				Bcol [l + 2] = B [(l + 2)  * M + j ] ;
 				Bcol [l + 3] = B [(l + 3)  * M + j ] ;
 				}
-
+				printf("ok A\n");
 				r = 0.0 ;
 				indice_ligne = i * M ;
 
 				for (k = 0; k < M; k = k + 2)
 				{
+					printf("On rentre dans for3 it %d\n", k);
 
 					av4 = _mm_load_pd (A+indice_ligne + k);
+					printf("point a-1\n");
 					bv4 = _mm_load_pd (Bcol+ k) ;
+					printf("point a-2\n");
 
 					dot = _mm_dp_pd (av4, bv4, 0xFF) ;
+					printf("point a-3\n");
 
 					_mm_store_pd (R4, dot) ;
+					printf("point a-4\n");
 
 					r = r + R4 [0] ;
+					printf("point a-5\n");
 				}
-
+				printf("ok B\n");
 				C [indice_ligne + j] = (alpha * r) + (beta * C [indice_ligne + j]) ;
 			}
 		}
 	}
 	else
 	{
+		printf("On rentre dans else\n");
 		#pragma omp parallel for schedule(static)
 		for (i = 0 ; i < M; i = i + 1)
 		{
