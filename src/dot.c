@@ -141,7 +141,7 @@ void   mncblas_cdotc_sub_vec(const int N, const void *X, const int incX,
 
   __m128 x1, y1, d;
 
-  #pragma omp parallel for schedule (static)
+  #pragma omp parallel for schedule (static) private(x1, y1, d)
   for (i=0;i<N;i += 4){
     x1 = _mm_load_ps (x+i) ;
     y1 = _mm_load_ps (y+i) ;

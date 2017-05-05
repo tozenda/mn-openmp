@@ -91,6 +91,11 @@ void mncblas_sswap (
 	float *Y, const int incY
 ) ;
 
+void mncblas_sswap_vec (
+	const int N, float *X, const int incX,
+	float *Y, const int incY
+) ;
+
 void mncblas_sswap_noomp (
 	const int N, float *X, const int incX,
 	float *Y, const int incY
@@ -102,6 +107,11 @@ void mncblas_sswap_omp (
 ) ;
 
 void mncblas_dswap (
+	const int N, double *X, const int incX,
+	double *Y, const int incY
+) ;
+
+void mncblas_dswap_vec (
 	const int N, double *X, const int incX,
 	double *Y, const int incY
 ) ;
@@ -183,6 +193,15 @@ void   mncblas_cdotc_sub (
 	const void *Y, const int incY, void *dotc
 ) ;
 
+void   mncblas_cdotc_sub_vec(const int N, const void *X, const int incX,
+                       const void *Y, const int incY, void *dotc);
+
+void   mncblas_cdotc_sub_omp(const int N, const void *X, const int incX,
+                       const void *Y, const int incY, void *dotc);
+
+void   mncblas_cdotc_sub_noomp(const int N, const void *X, const int incX,
+                       const void *Y, const int incY, void *dotc);
+
 void   mncblas_zdotu_sub (
 	const int N, const void *X, const int incX,
 	const void *Y, const int incY, void *dotu
@@ -210,6 +229,10 @@ void mncblas_saxpy (
 	const int incX, float *Y, const int incY
 ) ;
 
+void mncblas_saxpy_vec (
+	const int N, const float alpha, const float *X,
+	const int incX, float *Y, const int incY);
+
 void mncblas_saxpy_omp (
 	const int N, const float alpha, const float *X,
 	const int incX, float *Y, const int incY
@@ -221,6 +244,11 @@ void mncblas_saxpy_noomp (
 ) ;
 
 void mncblas_daxpy (
+	const int N, const double alpha, const double *X,
+	const int incX, double *Y, const int incY
+) ;
+
+void mncblas_daxpy_vec(
 	const int N, const double alpha, const double *X,
 	const int incX, double *Y, const int incY
 ) ;
