@@ -1,4 +1,4 @@
-BINARIES= mntest_saxpy mntest_daxpy mntest_scopy mntest_dcopy mntest_sdot mntest_ddot mntest_sgemm mntest_dgemm mntest_sswap mntest_dswap mntest_sgemv mntest_dgemv mntest_cswap mntest_zswap mntest_ccopy
+BINARIES= mntest_saxpy mntest_daxpy mntest_scopy mntest_dcopy mntest_sdot mntest_ddot mntest_sgemm mntest_dgemm mntest_sswap mntest_dswap mntest_sgemv mntest_dgemv mntest_cswap mntest_zswap mntest_ccopy mntest_zcopy
 
 all: $(BINARIES)
 
@@ -60,6 +60,9 @@ mntest_ccopy : mntest_ccopy.o $(LIB_DIR)/libmnblas.a
 mntest_zswap : mntest_zswap.o $(LIB_DIR)/libmnblas.a
 	gcc -o mntest_zswap mntest_zswap.o $(OPTIONS_LINK_STATIC)
 
+mntest_zcopy : mntest_zcopy.o $(LIB_DIR)/libmnblas.a
+	gcc -o mntest_zcopy mntest_zcopy.o $(OPTIONS_LINK_STATIC)
+
 #mntest1dyn: mntest1.o $(LIB_DIR)/libmnblasdyn.so
 	#gcc -o mntest1dyn mntest1.o $(OPTIONS_LINK_DYN)
 
@@ -108,6 +111,8 @@ mntest_ccopy.o: mntest_ccopy.c
 mntest_zswap.o: mntest_zswap.c
 	gcc $(OPTIONS_COMPIL) -c mntest_zswap.c
 
+mntest_zcopy.o: mntest_zcopy.c
+	gcc $(OPTIONS_COMPIL) -c mntest_zcopy.c
 
 
 clean_o:

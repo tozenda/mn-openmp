@@ -9,10 +9,10 @@
 
 #include <x86intrin.h>
 
-#define NBEXPERIMENTS    102
+#define NBEXPERIMENTS    10
 static long long unsigned int experiments [NBEXPERIMENTS] ;
 
-// #define VECSIZE    32
+ //#define VECSIZE    32
 #define VECSIZE    1048576
 
 typedef float vfloat  [VECSIZE] __attribute__ ((aligned (16))) ;
@@ -82,12 +82,14 @@ int main (int argc, char **argv)
 
   av = average (experiments) ;
 
+
   printf ("cblas_scopy : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,(((double) VECSIZE) / ((double) (av - residu) * (double) 0.38)));
 
 
   for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
     {
       vector_init (vec1, 1.0) ;
+      vector_init (vec2, 9.0) ;
 
       start = _rdtsc () ;
 
