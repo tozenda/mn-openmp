@@ -15,7 +15,7 @@ void mncblas_sgemv_vec (const MNCBLAS_LAYOUT layout,const MNCBLAS_TRANSPOSE Tran
 
 	float4 x4, r4 ;
 	__m128 xv4, a1, dot ;
-	#pragma omp parallel for schedule(static) private(indice,r,x4,r4,xv4,a1,dot)
+	#pragma omp parallel for schedule(static) private(i,j,x,indice,r,x4,r4,xv4,a1,dot)
 	for (i = 0; i < M; i += incX)
 	{
 		r = 0.0 ;
@@ -103,7 +103,7 @@ void mncblas_dgemv_vec (MNCBLAS_LAYOUT layout,MNCBLAS_TRANSPOSE TransA, const in
 	double2 x2, r2 ;
 	__m128d xv2, a1, dot ;
 
-	#pragma omp parallel for schedule(static) private(indice,r,x2,r2,xv2,a1,dot)
+	#pragma omp parallel for schedule(static) private(i,j,x,indice,r,x2,r2,xv2,a1,dot)
 
 	for (i = 0; i < M; i += incX)
 	{
@@ -163,7 +163,7 @@ void mncblas_dgemv_omp (MNCBLAS_LAYOUT layout,MNCBLAS_TRANSPOSE TransA, const in
 	register float x ;
 	register unsigned int indice ;
 	r = 0.0 ;
-	#pragma omp parallel for schedule(static) private(indice,r)
+	#pragma omp parallel for schedule(static) private(indice,i,j,x,r)
 	for (i = 0; i < M; i += incX)
 	{
 		x = X [i] ;

@@ -43,16 +43,35 @@ void mncblas_dcopy_omp (
 ) ;
 
 
-void mncblas_ccopy (
+void mncblas_ccopy_noomp (
 	const int N, const void *X, const int incX,
 	void *Y, const int incY
 ) ;
 
-void mncblas_zcopy (
+void mncblas_ccopy_omp (
 	const int N, const void *X, const int incX,
 	void *Y, const int incY
 ) ;
 
+void mncblas_ccopy_vec (
+	const int N, const void *X, const int incX,
+	void *Y, const int incY
+) ;
+
+void mncblas_zcopy_noomp (
+	const int N, const void *X, const int incX,
+	void *Y, const int incY
+) ;
+
+void mncblas_zcopy_omp (
+	const int N, const void *X, const int incX,
+	void *Y, const int incY
+) ;
+
+void mncblas_zcopy_vec (
+	const int N, const void *X, const int incX,
+	void *Y, const int incY
+) ;
 
 /*
 
