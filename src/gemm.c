@@ -1,3 +1,5 @@
+//COMPARAISON PERF DOUBLE (d)
+
 #include <stdlib.h>
 #include <stdio.h>
 

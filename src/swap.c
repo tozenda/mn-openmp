@@ -1,3 +1,5 @@
+// COMPARAISON PERF : DOUBLE (d)
+
 #include "mnblas.h"
 
 #include <stdio.h>

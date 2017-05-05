@@ -1,3 +1,5 @@
+//COMPARAISON PERF Z
+
 #include "mnblas.h"
 
 void mncblas_scopy(const int N, const float *X, const int incX, float *Y, const int incY)

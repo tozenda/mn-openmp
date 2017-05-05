@@ -1,3 +1,5 @@
+//COMPARAISON PERF Z
+
 #include "mnblas.h"
 #include <stdio.h>
 #include <nmmintrin.h>
