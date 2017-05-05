@@ -25,7 +25,7 @@ void mncblas_sswap(const int N, float *X, const int incX, float *Y, const int in
   return ;
 }
 
-void mncblas_sswap_1(const int N, float *X, const int incX, float *Y, const int incY)
+void mncblas_sswap_vec(const int N, float *X, const int incX, float *Y, const int incY)
 {
   register unsigned int i;
 
@@ -67,7 +67,7 @@ void mncblas_sswap_omp(const int N, float *X, const int incX, float *Y, const in
   }
 }
 
-void mncblas_dswap_1(const int N, double *X, const int incX, double *Y, const int incY)
+void mncblas_dswap_vec(const int N, double *X, const int incX, double *Y, const int incY)
 {
   register unsigned int i;
 
