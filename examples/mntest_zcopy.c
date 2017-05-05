@@ -8,12 +8,12 @@
 */
 #include <x86intrin.h>
 
-#define NBEXPERIMENTS    10
+#define NBEXPERIMENTS    102
 static long long unsigned int experiments [NBEXPERIMENTS] ;
 
- #define VECSIZE    64
+ //#define VECSIZE    64
  //#define VECSIZE    1000
-//#define VECSIZE    1048576
+#define VECSIZE    1048576
 
 typedef double vfloat  [VECSIZE] __attribute__ ((aligned (16))) ;
 typedef double vdouble [VECSIZE] __attribute__ ((aligned (16))) ;
@@ -61,7 +61,7 @@ int main (int argc, char **argv)
   unsigned long long int residu ;
   unsigned long long int av ;
   int exp ;
-  printf("Comparaison pour COPY entre CBLAS, notre fonction non parallélisée et notre fonction parallelisée\n");
+  printf("Comparaison pour COPY entre notre fonction non parallélisée, notre fonction parallelisée et notre fonction vectorisée et parallélisée\n");
  /* Calcul du residu de la mesure */
   start = _rdtsc () ;
   end = _rdtsc () ;
@@ -120,9 +120,6 @@ int main (int argc, char **argv)
 
   av = average (experiments) ;
 
-  printf("\n\n");
-     vector_print (vec2) ;
-     printf("\n\n");
   // vector_print (vec2) ;
   printf ("mncblas_zcopy_omp : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,((((double) VECSIZE)) / ((double) (av - residu) * (double) 0.17)));
 
@@ -141,9 +138,6 @@ int main (int argc, char **argv)
     }
 
   av = average (experiments) ;
-printf("\n\n");
-   vector_print (vec2) ;
-   printf("\n\n");
   printf ("mncblas_zcopy_vec : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,((((double) VECSIZE)) / ((double) (av - residu) * (double) 0.17)));
 
 }
