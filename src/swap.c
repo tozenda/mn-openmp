@@ -1,5 +1,12 @@
 #include "mnblas.h"
 
+#include <stdio.h>
+#include <x86intrin.h>
+#include <nmmintrin.h>
+
+// on va tester les doubles
+
+
 void mncblas_sswap(const int N, float *X, const int incX, float *Y, const int incY)
 {
   register unsigned int i = 0 ;
@@ -14,6 +21,22 @@ void mncblas_sswap(const int N, float *X, const int incX, float *Y, const int in
   }
 
   return ;
+}
+
+void mncblas_sswap_1(const int N, float *X, const int incX, float *Y, const int incY)
+{
+  register unsigned int i;
+
+  __m128 x, y;
+
+  #pragma omp for schedule(static) private (x, y)
+  for (i=0;i < N;i += 4)
+  {
+    x = _mm_load_ps (X+i) ;
+    y = _mm_load_ps (Y+i) ;
+    _mm_store_ps (Y+i, x) ;
+    _mm_store_ps (X+i, y) ;
+  }
 }
 
 void mncblas_sswap_noomp(const int N, float *X, const int incX, float *Y, const int incY)
@@ -39,6 +62,22 @@ void mncblas_sswap_omp(const int N, float *X, const int incX, float *Y, const in
     save = Y [i] ;
     Y [i] = X [i] ;
     X [i] = save ;
+  }
+}
+
+void mncblas_dswap_1(const int N, double *X, const int incX, double *Y, const int incY)
+{
+  register unsigned int i;
+
+  __m128d x, y;
+
+  #pragma omp for schedule(static) private (x, y)
+  for (i=0;i < N;i += 2)
+  {
+    x = _mm_load_pd (X+i) ;
+    y = _mm_load_pd (Y+i) ;
+    _mm_store_pd (Y+i, x) ;
+    _mm_store_pd (X+i, y) ;
   }
 }
 

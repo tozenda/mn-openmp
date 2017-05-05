@@ -1,4 +1,5 @@
 #include <stdio.h>
+
 #include <cblas.h>
 
 #include "mnblas.h"
@@ -12,7 +13,7 @@
 static long long unsigned int experiments [NBEXPERIMENTS] ;
 
 // #define VECSIZE    32
-#define VECSIZE    1048576
+#define VECSIZE    200
 
 typedef float vfloat  [VECSIZE] __attribute__ ((aligned (16))) ;
 typedef float vdouble [VECSIZE] __attribute__ ((aligned (16))) ;
@@ -69,13 +70,10 @@ int main (int argc, char **argv)
   for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
     {
       vector_init (vec1, 1.0) ;
-
       start = _rdtsc () ;
 
          cblas_cswap (VECSIZE, vec1, 1, vec2, 1) ;
-
       end = _rdtsc () ;
-
       experiments [exp] = end - start ;
     }
 

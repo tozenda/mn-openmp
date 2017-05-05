@@ -85,6 +85,23 @@ int main (int argc, char **argv)
 
   printf ("cblas_dswap : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,((((double) VECSIZE)) / ((double) (av - residu) * (double) 0.17)));
 
+  for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
+    {
+      vector_init (vec1, 1.0) ;
+
+      start = _rdtsc () ;
+
+         mncblas_dswap_1 (VECSIZE, vec1, 1, vec2, 1) ;
+
+      end = _rdtsc () ;
+
+      experiments [exp] = end - start ;
+    }
+
+  av = average (experiments) ;
+
+  printf ("mncblas_dswap_1 (vect) : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,((((double) VECSIZE)) / ((double) (av - residu) * (double) 0.17)));
+
 
   for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
     {
