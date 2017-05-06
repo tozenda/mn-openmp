@@ -83,6 +83,23 @@ int main (int argc, char **argv)
 
   printf ("cblas_saxpy : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,(((double) 8 * (double) VECSIZE) / ((double) (av - residu) * (double) 0.17)));
 
+  for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
+    {
+      vector_init (vec1, 1.0) ;
+
+      start = _rdtsc () ;
+
+         mncblas_saxpy_vec (VECSIZE, 3.0, vec1, 1, vec2, 1) ;
+
+      end = _rdtsc () ;
+
+      experiments [exp] = end - start ;
+    }
+
+  av = average (experiments) ;
+
+  printf ("mncblas_saxpy_vec : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,(((double) 8 * (double) VECSIZE) / ((double) (av - residu) * (double) 0.38)));
+
 
   for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
     {

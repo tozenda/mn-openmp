@@ -71,6 +71,7 @@ int main (int argc, char **argv)
   for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
     {
       vector_init (vec1, 1.0) ;
+      vector_init (vec2, 2.0) ;
 
       start = _rdtsc () ;
 
@@ -88,6 +89,7 @@ int main (int argc, char **argv)
   for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
     {
       vector_init (vec1, 1.0) ;
+      vector_init (vec2, 2.0) ;
 
       start = _rdtsc () ;
 
@@ -106,12 +108,13 @@ int main (int argc, char **argv)
   for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
     {
       vector_init (vec1, 1.0) ;
+      vector_init (vec2, 2.0) ;
 
       start = _rdtsc () ;
 
          mncblas_dswap_noomp (VECSIZE, vec1, 1, vec2, 1) ;
 
-      end = _rdtsc () ; 
+      end = _rdtsc () ;
 
       experiments [exp] = end - start ;
     }

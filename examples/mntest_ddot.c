@@ -122,6 +122,26 @@ int main (int argc, char **argv)
   // vector_print (vec2) ;
   printf ("mncblas_ddot_omp : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,((((double) 2 * (double) VECSIZE)) / ((double) (av - residu) * (double) 0.38)));
 
+  for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
+    {
+      vector_init (vec1, 1.0) ;
+      vector_init (vec2, 2.0) ;
+
+      start = _rdtsc () ;
+
+          mncblas_ddot_vec (VECSIZE, vec1, 1, vec2, 1) ;
+
+      end = _rdtsc () ;
+
+      experiments [exp] = end - start ;
+    }
+
+  av = average (experiments) ;
+
+  // vector_print (vec2) ;
+  printf ("mncblas_ddot_vec : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,((((double) 2 * (double) VECSIZE)) / ((double) (av - residu) * (double) 0.38)));
+
+
 
 
 }

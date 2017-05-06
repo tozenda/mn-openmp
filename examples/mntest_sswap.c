@@ -11,8 +11,8 @@
 #define NBEXPERIMENTS    102
 static long long unsigned int experiments [NBEXPERIMENTS] ;
 
-// #define VECSIZE    32
-#define VECSIZE    1048576
+#define VECSIZE    32
+// #define VECSIZE    1048576
 
 typedef float vfloat  [VECSIZE] __attribute__ ((aligned (16))) ;
 typedef float vdouble [VECSIZE] __attribute__ ((aligned (16))) ;
@@ -69,6 +69,7 @@ int main (int argc, char **argv)
   for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
     {
       vector_init (vec1, 1.0) ;
+      vector_init (vec2, 2.0) ;
 
       start = _rdtsc () ;
 
@@ -80,13 +81,15 @@ int main (int argc, char **argv)
     }
 
   av = average (experiments) ;
-
+  // vector_print (vec2) ;
+  // vector_print(vec1);
   printf ("cblas_sswap : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,((((double) VECSIZE)) / ((double) (av - residu) * (double) 0.17)));
 
 
   for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
     {
       vector_init (vec1, 1.0) ;
+      vector_init (vec2, 2.0) ;
 
       start = _rdtsc () ;
 
@@ -98,6 +101,8 @@ int main (int argc, char **argv)
     }
 
   av = average (experiments) ;
+  // vector_print (vec2) ;
+  // vector_print(vec1);
 
   printf ("mncblas_sswap_vec : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,((((double) VECSIZE)) / ((double) (av - residu) * (double) 0.17)));
 
@@ -105,6 +110,7 @@ int main (int argc, char **argv)
   for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
     {
       vector_init (vec1, 1.0) ;
+      vector_init (vec2, 2.0) ;
 
       start = _rdtsc () ;
 
@@ -137,6 +143,7 @@ int main (int argc, char **argv)
   av = average (experiments) ;
 
   // vector_print (vec2) ;
+  // vector_print(vec1);
   printf ("mncblas_sswap_omp : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,((((double) VECSIZE)) / ((double) (av - residu) * (double) 0.17)));
 
 }

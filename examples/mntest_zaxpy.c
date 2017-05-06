@@ -2,7 +2,6 @@
 #include <cblas.h>
 
 #include "mnblas.h"
-#include <cblas.h>
 
 /*
   Mesure des cycles
@@ -14,7 +13,7 @@
 static long long unsigned int experiments [NBEXPERIMENTS] ;
 
 // #define VECSIZE    32
-#define VECSIZE    100
+#define VECSIZE    1048576
 
 typedef float vfloat  [VECSIZE] __attribute__ ((aligned (16))) ;
 typedef double vdouble [VECSIZE] __attribute__ ((aligned (16))) ;
@@ -62,7 +61,7 @@ int main (int argc, char **argv)
   unsigned long long int residu ;
   unsigned long long int av ;
   int exp ;
-  printf("Comparaison pour zSWAP entre CBLAS, notre fonction non parallélisée et notre fonction parallelisée\n");
+  printf("Comparaison pour zaxpy entre CBLAS, notre fonction non parallélisée et notre fonction parallelisée\n");
  /* Calcul du residu de la mesure */
   start = _rdtsc () ;
   end = _rdtsc () ;
@@ -71,11 +70,10 @@ int main (int argc, char **argv)
   for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
     {
       vector_init (vec1, 1.0) ;
-      vector_init (vec2, 2.0) ;
 
       start = _rdtsc () ;
 
-         cblas_zswap (VECSIZE, vec1, 1, vec2, 1) ;
+         cblas_zaxpy (VECSIZE, 3.0, vec1, 1, vec2, 1) ;
 
       end = _rdtsc () ;
 
@@ -84,16 +82,15 @@ int main (int argc, char **argv)
 
   av = average (experiments) ;
 
-  printf ("cblas_zswap : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,((((double) VECSIZE)) / ((double) (av - residu) * (double) 0.17)));
+  printf ("cblas_zaxpy : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,(((double) 8 * (double) VECSIZE) / ((double) (av - residu) * (double) 0.38)));
 
   for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
     {
       vector_init (vec1, 1.0) ;
-      vector_init (vec2, 2.0) ;
 
       start = _rdtsc () ;
 
-         mncblas_zswap_vec (VECSIZE, vec1, 1, vec2, 1) ;
+         mncblas_zaxpy_vec (VECSIZE, 3.0, vec1, 1, vec2, 1) ;
 
       end = _rdtsc () ;
 
@@ -102,16 +99,16 @@ int main (int argc, char **argv)
 
   av = average (experiments) ;
 
-  printf ("mncblas_zswap_vec : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,((((double) VECSIZE)) / ((double) (av - residu) * (double) 0.17)));
+  printf ("mncblas_zaxpy_vec : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,(((double) 8 * (double) VECSIZE) / ((double) (av - residu) * (double) 0.38)));
+
 
   for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
     {
       vector_init (vec1, 1.0) ;
-      vector_init (vec2, 2.0) ;
 
       start = _rdtsc () ;
 
-         mncblas_zswap_noomp (VECSIZE, vec1, 1, vec2, 1) ;
+         mncblas_zaxpy_noomp (VECSIZE, 3.0, vec1, 1, vec2, 1) ;
 
       end = _rdtsc () ;
 
@@ -120,7 +117,7 @@ int main (int argc, char **argv)
 
   av = average (experiments) ;
 
-  printf ("mncblas_zswap_noomp : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,((((double) VECSIZE)) / ((double) (av - residu) * (double) 0.17)));
+  printf ("mncblas_zaxpy_noomp : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,(((double) 8 * (double) VECSIZE) / ((double) (av - residu) * (double) 0.38)));
 
 
   for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
@@ -130,7 +127,7 @@ int main (int argc, char **argv)
 
       start = _rdtsc () ;
 
-          mncblas_zswap_omp (VECSIZE, vec1, 1, vec2, 1) ;
+          mncblas_zaxpy_omp (VECSIZE, 3.0, vec1, 1, vec2, 1) ;
 
       end = _rdtsc () ;
 
@@ -140,6 +137,8 @@ int main (int argc, char **argv)
   av = average (experiments) ;
 
   // vector_print (vec2) ;
-  printf ("mncblas_zswap_omp : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,((((double) VECSIZE)) / ((double) (av - residu) * (double) 0.17)));
+  printf ("mncblas_zaxpy_omp : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,(((double) 8 * (double) VECSIZE) / ((double) (av - residu) * (double) 0.38)));
+
+
 
 }

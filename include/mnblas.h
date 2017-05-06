@@ -11,12 +11,6 @@ BEGIN BLAS1 copy
 
 */
 
-
-void mncblas_scopy (
-	const int N, const float *X, const int incX,
-	float *Y, const int incY
-) ;
-
 void mncblas_scopy_noomp (
 	const int N, const float *X, const int incX,
 	float *Y, const int incY
@@ -27,9 +21,9 @@ void mncblas_scopy_omp (
 	float *Y, const int incY
 ) ;
 
-void mncblas_dcopy (
-	const int N, const double *X, const int incX,
-	double *Y, const int incY
+void mncblas_scopy_vec (
+	const int N, const float *X, const int incX,
+	float *Y, const int incY
 ) ;
 
 void mncblas_dcopy_noomp (
@@ -42,6 +36,10 @@ void mncblas_dcopy_omp (
 	double *Y, const int incY
 ) ;
 
+void mncblas_dcopy_vec (
+	const int N, const double *X, const int incX,
+	double *Y, const int incY
+) ;
 
 void mncblas_ccopy_noomp (
 	const int N, const void *X, const int incX,
@@ -86,11 +84,6 @@ BEGIN BLAS1 SWAP
 
 */
 
-void mncblas_sswap (
-	const int N, float *X, const int incX,
-	float *Y, const int incY
-) ;
-
 void mncblas_sswap_vec (
 	const int N, float *X, const int incX,
 	float *Y, const int incY
@@ -104,11 +97,6 @@ void mncblas_sswap_noomp (
 void mncblas_sswap_omp (
 	const int N, float *X, const int incX,
 	float *Y, const int incY
-) ;
-
-void mncblas_dswap (
-	const int N, double *X, const int incX,
-	double *Y, const int incY
 ) ;
 
 void mncblas_dswap_vec (
@@ -126,12 +114,22 @@ void mncblas_dswap_omp (
 	double *Y, const int incY
 ) ;
 
+void mncblas_cswap_vec (
+	const int N, void *X, const int incX,
+	void *Y, const int incY
+) ;
+
 void mncblas_cswap_omp (
 	const int N, void *X, const int incX,
 	void *Y, const int incY
 ) ;
 
 void mncblas_cswap_noomp (
+	const int N, void *X, const int incX,
+	void *Y, const int incY
+) ;
+
+void mncblas_zswap_vec (
 	const int N, void *X, const int incX,
 	void *Y, const int incY
 ) ;
@@ -159,9 +157,6 @@ BEGIN BLAS1 DOT
 
 */
 
-float  mncblas_sdot (
-	const int N, const float  *X, const int incX,const float  *Y, const int incY
-) ;
 
 float  mncblas_sdot_noomp (
 	const int N, const float  *X, const int incX,const float  *Y, const int incY
@@ -171,7 +166,11 @@ float  mncblas_sdot_omp (
 	const int N, const float  *X, const int incX,const float  *Y, const int incY
 ) ;
 
-double mncblas_ddot (
+float  mncblas_sdot_vec (
+	const int N, const float  *X, const int incX,const float  *Y, const int incY
+) ;
+
+double mncblas_ddot_vec (
 	const int N, const double *X, const int incX, const double *Y, const int incY
 ) ;
 
@@ -183,12 +182,22 @@ double mncblas_ddot_omp(
 	const int N, const double *X, const int incX, const double *Y, const int incY
 ) ;
 
-void   mncblas_cdotu_sub (
+void   mncblas_cdotu_sub_noomp (
 	const int N, const void *X, const int incX,
 	const void *Y, const int incY, void *dotu
 ) ;
 
-void   mncblas_cdotc_sub (
+void   mncblas_cdotu_sub_omp (
+	const int N, const void *X, const int incX,
+	const void *Y, const int incY, void *dotu
+) ;
+
+void   mncblas_cdotu_sub_vec (
+	const int N, const void *X, const int incX,
+	const void *Y, const int incY, void *dotu
+) ;
+
+void   mncblas_cdotc_sub_noomp (
 	const int N, const void *X, const int incX,
 	const void *Y, const int incY, void *dotc
 ) ;
@@ -202,16 +211,35 @@ void   mncblas_cdotc_sub_omp(const int N, const void *X, const int incX,
 void   mncblas_cdotc_sub_noomp(const int N, const void *X, const int incX,
                        const void *Y, const int incY, void *dotc);
 
-void   mncblas_zdotu_sub (
+void   mncblas_zdotu_sub_noomp (
 	const int N, const void *X, const int incX,
 	const void *Y, const int incY, void *dotu
 );
 
-void   mncblas_zdotc_sub (
+void   mncblas_zdotu_sub_omp (
+	const int N, const void *X, const int incX,
+	const void *Y, const int incY, void *dotu
+);
+
+void   mncblas_zdotu_sub_vec (
+	const int N, const void *X, const int incX,
+	const void *Y, const int incY, void *dotu
+);
+
+void   mncblas_zdotc_sub_noomp (
 	const int N, const void *X, const int incX,
 	const void *Y, const int incY, void *dotc
 ) ;
 
+void   mncblas_zdotc_sub_omp (
+	const int N, const void *X, const int incX,
+	const void *Y, const int incY, void *dotc
+) ;
+
+void   mncblas_zdotc_sub_vec (
+	const int N, const void *X, const int incX,
+	const void *Y, const int incY, void *dotc
+) ;
 /*
 
 END BLAS1 DOT
@@ -223,11 +251,6 @@ END BLAS1 DOT
 BEGIN BLAS1 AXPY
 
 */
-
-void mncblas_saxpy (
-	const int N, const float alpha, const float *X,
-	const int incX, float *Y, const int incY
-) ;
 
 void mncblas_saxpy_vec (
 	const int N, const float alpha, const float *X,
@@ -241,11 +264,6 @@ void mncblas_saxpy_omp (
 void mncblas_saxpy_noomp (
 	const int N, const float alpha, const float *X,
 	const int incX, float *Y, const int incY
-) ;
-
-void mncblas_daxpy (
-	const int N, const double alpha, const double *X,
-	const int incX, double *Y, const int incY
 ) ;
 
 void mncblas_daxpy_vec(
@@ -263,12 +281,32 @@ void mncblas_daxpy_omp(
 	const int incX, double *Y, const int incY
 ) ;
 
-void mncblas_caxpy (
+void mncblas_caxpy_noomp (
 	const int N, const void *alpha, const void *X,
 	const int incX, void *Y, const int incY
 ) ;
 
-void mncblas_zaxpy (
+void mncblas_caxpy_omp (
+	const int N, const void *alpha, const void *X,
+	const int incX, void *Y, const int incY
+) ;
+
+void mncblas_caxpy_vec (
+	const int N, const void *alpha, const void *X,
+	const int incX, void *Y, const int incY
+) ;
+
+void mncblas_zaxpy_noomp (
+	const int N, const void *alpha, const void *X,
+	const int incX, void *Y, const int incY
+) ;
+
+void mncblas_zaxpy_omp (
+	const int N, const void *alpha, const void *X,
+	const int incX, void *Y, const int incY
+) ;
+
+void mncblas_zaxpy_vec (
 	const int N, const void *alpha, const void *X,
 	const int incX, void *Y, const int incY
 ) ;
@@ -333,7 +371,24 @@ void mncblas_dgemv_omp (
 	const double *X, const int incX, const double beta,
 	double *Y, const int incY
 ) ;
-void mncblas_cgemv (
+
+void mncblas_cgemv_omp (
+	MNCBLAS_LAYOUT layout,
+	MNCBLAS_TRANSPOSE TransA, const int M, const int N,
+	const void *alpha, const void *A, const int lda,
+	const void *X, const int incX, const void *beta,
+	void *Y, const int incY
+) ;
+
+void mncblas_cgemv_noomp (
+	MNCBLAS_LAYOUT layout,
+	MNCBLAS_TRANSPOSE TransA, const int M, const int N,
+	const void *alpha, const void *A, const int lda,
+	const void *X, const int incX, const void *beta,
+	void *Y, const int incY
+) ;
+
+void mncblas_cgemv_vec (
 	MNCBLAS_LAYOUT layout,
 	MNCBLAS_TRANSPOSE TransA, const int M, const int N,
 	const void *alpha, const void *A, const int lda,
@@ -361,21 +416,13 @@ END BLAS2 GEMV
 BEGIN BLAS3 GEMM
 
 */
-void mncblas_sgemm_1 (
+void mncblas_sgemm_vec (
 	MNCBLAS_LAYOUT layout, MNCBLAS_TRANSPOSE TransA,
 	MNCBLAS_TRANSPOSE TransB, const int M, const int N,
 	const int K, const float alpha, const float *A,
 	const int lda, const float *B, const int ldb,
 	const float beta, float *C, const int ldc
 );
-
-void mncblas_sgemm (
-	MNCBLAS_LAYOUT layout, MNCBLAS_TRANSPOSE TransA,
-	MNCBLAS_TRANSPOSE TransB, const int M, const int N,
-	const int K, const float alpha, const float *A,
-	const int lda, const float *B, const int ldb,
-	const float beta, float *C, const int ldc
-) ;
 
 void mncblas_sgemm_omp (
 	MNCBLAS_LAYOUT layout, MNCBLAS_TRANSPOSE TransA,
@@ -394,15 +441,7 @@ void mncblas_sgemm_noomp (
 ) ;
 
 
-void mncblas_dgemm_1 (
-	MNCBLAS_LAYOUT layout, MNCBLAS_TRANSPOSE TransA,
-	MNCBLAS_TRANSPOSE TransB, const int M, const int N,
-	const int K, const double alpha, const double *A,
-	const int lda, const double *B, const int ldb,
-	const double beta, double *C, const int ldc
-) ;
-
-void mncblas_dgemm (
+void mncblas_dgemm_vec (
 	MNCBLAS_LAYOUT layout, MNCBLAS_TRANSPOSE TransA,
 	MNCBLAS_TRANSPOSE TransB, const int M, const int N,
 	const int K, const double alpha, const double *A,
@@ -435,6 +474,37 @@ void mncblas_cgemm (
 	const void *beta, void *C, const int ldc
 ) ;
 
+void mncblas_cgemm (
+	MNCBLAS_LAYOUT layout, MNCBLAS_TRANSPOSE TransA,
+	MNCBLAS_TRANSPOSE TransB, const int M, const int N,
+	const int K, const void *alpha, const void *A,
+	const int lda, const void *B, const int ldb,
+	const void *beta, void *C, const int ldc
+) ;
+
+void mncblas_cgemm (
+	MNCBLAS_LAYOUT layout, MNCBLAS_TRANSPOSE TransA,
+	MNCBLAS_TRANSPOSE TransB, const int M, const int N,
+	const int K, const void *alpha, const void *A,
+	const int lda, const void *B, const int ldb,
+	const void *beta, void *C, const int ldc
+) ;
+
+void mncblas_zgemm (
+	MNCBLAS_LAYOUT layout, MNCBLAS_TRANSPOSE TransA,
+	MNCBLAS_TRANSPOSE TransB, const int M, const int N,
+	const int K, const void *alpha, const void *A,
+	const int lda, const void *B, const int ldb,
+	const void *beta, void *C, const int ldc
+) ;
+
+void mncblas_zgemm (
+	MNCBLAS_LAYOUT layout, MNCBLAS_TRANSPOSE TransA,
+	MNCBLAS_TRANSPOSE TransB, const int M, const int N,
+	const int K, const void *alpha, const void *A,
+	const int lda, const void *B, const int ldb,
+	const void *beta, void *C, const int ldc
+) ;
 
 void mncblas_zgemm (
 	MNCBLAS_LAYOUT layout, MNCBLAS_TRANSPOSE TransA,

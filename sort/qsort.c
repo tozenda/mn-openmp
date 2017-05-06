@@ -141,6 +141,7 @@ void echanger(int t[], int a, int b)
     t[b] = temp;
 }
 
+// renvoie le pivot
 int partition(int T[], int deb, int fin)
 {
     int compt=deb;
@@ -159,6 +160,7 @@ int partition(int T[], int deb, int fin)
     return(compt);
 }
 
+// appelle recursif si pas trié
 void parallel_qsort_sort_bis(int T[],int debut,int fin){
     if(debut<fin){
         int pivot=partition(T,debut,fin);

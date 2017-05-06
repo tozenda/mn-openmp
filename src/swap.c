@@ -6,38 +6,26 @@
 #include <x86intrin.h>
 #include <nmmintrin.h>
 
-// on va tester les doubles
 
-
-void mncblas_sswap(const int N, float *X, const int incX, float *Y, const int incY)
-{
-  register unsigned int i = 0 ;
-  register unsigned int j = 0 ;
-  register float save ;
-
-  for (; ((i < N) && (j < N)) ; i += incX, j+=incY)
-  {
-    save = Y [j] ;
-    Y [j] = X [i] ;
-    X [i] = save ;
-  }
-
-  return ;
-}
+/*************************** SSWAP **************************/
 
 void mncblas_sswap_vec(const int N, float *X, const int incX, float *Y, const int incY)
 {
   register unsigned int i;
 
   __m128 x, y;
+  int incx, incy;
 
-  #pragma omp for schedule(static) private (x, y)
+  #pragma omp for schedule(static) private(incx, incy)
   for (i=0;i < N;i += 4)
   {
-    x = _mm_load_ps (X+i) ;
-    y = _mm_load_ps (Y+i) ;
-    _mm_store_ps (Y+i, x) ;
-    _mm_store_ps (X+i, y) ;
+    incx = i*incX;
+    incy = i*incY;
+
+    x = _mm_load_ps (X+incx) ;
+    y = _mm_load_ps (Y+incy) ;
+    _mm_store_ps (Y+incy, x) ;
+    _mm_store_ps (X+incx, y) ;
   }
 }
 
@@ -46,11 +34,16 @@ void mncblas_sswap_noomp(const int N, float *X, const int incX, float *Y, const 
   register unsigned int i;
   register float save ;
 
-  for (i=0;i < N;i += incX)
+  int incx, incy;
+
+  for (i=0;i < N;i += 1)
   {
-    save = Y [i] ;
-    Y [i] = X [i] ;
-    X [i] = save ;
+    incx = i*incX;
+    incy = i*incY;
+
+    save = Y [incy] ;
+    Y [incy] = X [incx] ;
+    X [incx] = save ;
   }
 }
 
@@ -58,28 +51,38 @@ void mncblas_sswap_omp(const int N, float *X, const int incX, float *Y, const in
 {
   register unsigned int i;
   register float save ;
-  #pragma omp for schedule(static) private (save)
-  for (i=0;i < N;i += incX)
+  int incx, incy;
+
+  #pragma omp for schedule(static) private(save, incx, incy)
+  for (i=0;i < N;i += 1)
   {
-    save = Y [i] ;
-    Y [i] = X [i] ;
-    X [i] = save ;
+    incx = i*incX;
+    incy = i*incY;
+
+    save = Y [incy] ;
+    Y [incy] = X [incx] ;
+    X [incx] = save ;
   }
 }
+
+/*************************** DSWAP **************************/
 
 void mncblas_dswap_vec(const int N, double *X, const int incX, double *Y, const int incY)
 {
   register unsigned int i;
 
   __m128d x, y;
+  int incx, incy;
 
-  #pragma omp for schedule(static) private (x, y)
+  #pragma omp for schedule(static) private(incx, incy)
   for (i=0;i < N;i += 2)
   {
-    x = _mm_load_pd (X+i) ;
-    y = _mm_load_pd (Y+i) ;
-    _mm_store_pd (Y+i, x) ;
-    _mm_store_pd (X+i, y) ;
+    incx = i*incX;
+    incy = i*incY;
+    x = _mm_load_pd (X+incx) ;
+    y = _mm_load_pd (Y+incy) ;
+    _mm_store_pd (Y+incy, x) ;
+    _mm_store_pd (X+incx, y) ;
   }
 }
 
@@ -87,11 +90,16 @@ void mncblas_dswap_noomp(const int N, double *X, const int incX,double *Y, const
 {
   register unsigned int i;
   register double save ;
-  for (i=0;i < N;i += incX)
+  int incx, incy;
+
+  for (i=0;i < N;i += 1)
   {
-    save = Y [i] ;
-    Y [i] = X [i] ;
-    X [i] = save ;
+    incx = i*incX;
+    incy = i*incY;
+
+    save = Y [incy] ;
+    Y [incy] = X [incx] ;
+    X [incx] = save ;
   }
 }
 
@@ -99,12 +107,42 @@ void mncblas_dswap_omp(const int N, double *X, const int incX,double *Y, const i
 {
   register unsigned int i;
   register double save ;
-  #pragma omp parallel for schedule (static) private(save)
-  for (i=0;i < N;i += incX)
+  int incx, incy;
+
+  #pragma omp parallel for schedule (static) private(save, incx, incy)
+  for (i=0;i < N;i += 1)
   {
-    save = Y [i] ;
-    Y [i] = X [i] ;
-    X [i] = save ;
+    incx = i*incX;
+    incy = i*incY;
+
+    save = Y [incy] ;
+    Y [incy] = X [incx] ;
+    X [incx] = save ;
+  }
+}
+
+/*************************** SSWAP **************************/
+
+void mncblas_cswap_vec(const int N, void *X, const int incX, void *Y, const int incY)
+{
+  register unsigned int i;
+
+  __m128 x, y;
+  int incx, incy;
+
+  float *a = (float *)X;
+  float *b = (float *)Y;
+
+  #pragma omp for schedule(static) private(incx, incy)
+  for (i=0;i < N;i += 4)
+  {
+    incx = i*incX;
+    incy = i*incY;
+
+    x = _mm_load_ps (a+incx) ;
+    y = _mm_load_ps (b+incy) ;
+    _mm_store_ps (b+incy, x) ;
+    _mm_store_ps (a+incx, y) ;
   }
 }
 
@@ -112,15 +150,19 @@ void mncblas_cswap_noomp(const int N, void *X, const int incX,void *Y, const int
 {
   register unsigned int i;
   register float save ;
+  int incx, incy;
 
   float *x = (float *)X;
   float *y = (float *)Y;
 
-  for (i=0;i < N;i += incX)
+  for (i=0;i < N;i += 1)
   {
-    save = y [i] ;
-    y [i] = x [i] ;
-    x [i] = save ;
+    incx = i*incX;
+    incy = i*incY;
+
+    save = y [incy] ;
+    y [incy] = x [incx] ;
+    x [incx] = save ;
   }
 }
 
@@ -128,32 +170,42 @@ void mncblas_cswap_omp(const int N, void *X, const int incX,void *Y, const int i
 {
   register unsigned int i;
   register float save ;
+  int incx, incy;
 
   float *x = (float *)X;
   float *y = (float *)Y;
 
-  #pragma omp for schedule(static) private (save)
-  for (i=0;i < N;i += incX)
+  #pragma omp for schedule(static) private(save, incx, incy)
+  for (i=0;i < N;i += 1)
   {
-    save = y [i] ;
-    y [i] = x [i] ;
-    x [i] = save ;
+    incx = i*incX;
+    incy = i*incY;
+
+    save = y [incy] ;
+    y[incy] = x [incx] ;
+    x [incx] = save ;
   }
 }
+
+/*************************** ZSWAP **************************/
 
 void mncblas_zswap_noomp(const int N, void *X, const int incX,void *Y, const int incY)
 {
   register unsigned int i;
   register double save ;
+  int incx, incy;
 
   double *x = (double *)X;
   double *y = (double *)Y;
 
-  for (i=0;i < N;i += incX)
+  for (i=0;i < N;i += 1)
   {
-    save = y [i] ;
-    y [i] = x [i] ;
-    x [i] = save ;
+    incx = i*incX;
+    incy = i*incY;
+
+    save = y [incy] ;
+    y [incy] = x [incx] ;
+    x [incx] = save ;
   }
 }
 
@@ -161,15 +213,41 @@ void mncblas_zswap_omp(const int N, void *X, const int incX,void *Y, const int i
 {
   register unsigned int i;
   register double save ;
+  int incx, incy;
 
   double *x = (double *)X;
   double *y = (double *)Y;
 
-  #pragma omp for schedule(static) private (save)
-  for (i=0;i < N;i += incX)
+  #pragma omp for schedule(static) private(save, incx, incy)
+  for (i=0;i < N;i += 1)
   {
-    save = y [i] ;
-    y [i] = x [i] ;
-    x [i] = save ;
+    incx = i*incX;
+    incy = i*incY;
+
+    save = y [incy] ;
+    y [incy] = x [incx] ;
+    x [incx] = save ;
+  }
+}
+
+void mncblas_zswap_vec(const int N, void *X, const int incX,void *Y, const int incY)
+{
+  register unsigned int i;
+
+  __m128d x, y;
+  int incx, incy;
+
+  double *a = (double *)X;
+  double *b = (double *)Y;
+
+  #pragma omp for schedule(static) private(incx, incy)
+  for (i=0;i < N;i += 2)
+  {
+    incx = i*incX;
+    incy = i*incY;
+    x = _mm_load_pd (a+incx) ;
+    y = _mm_load_pd (b+incy) ;
+    _mm_store_pd (b+incy, x) ;
+    _mm_store_pd (a+incx, y) ;
   }
 }

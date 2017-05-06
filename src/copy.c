@@ -7,20 +7,7 @@
 
 typedef double double2 [2] __attribute__ ((aligned (16))) ;
 
-void mncblas_scopy(const int N, const float *X, const int incX, float *Y, const int incY)
-{
-  register unsigned int i = 0 ;
-  register unsigned int j = 0 ;
-
-  for (; ((i < N) && (j < N)) ; i = i + incX + 4, j = j + incY + 4)
-  {
-    Y [j] = X [i] ;
-    Y [j+1] = X [i+1] ;
-    Y [j+2] = X [i+2] ;
-    Y [j+3] = X [i+3] ;
-  }
-  return ;
-}
+/*************************** CCOPY **************************/
 
 void mncblas_scopy_noomp(const int N, const float *X, const int incX, float *Y, const int incY){
   register unsigned int i = 0 ;
@@ -47,18 +34,12 @@ void mncblas_scopy_omp(const int N, const float *X, const int incX, float *Y, co
   return ;
 }
 
-void mncblas_dcopy(const int N, const double *X, const int incX, double *Y, const int incY){
-  register unsigned int i = 0 ;
-
-  for (i=0;i < N; i = i + incX*(4)){
-    Y [i] = X [i] ;
-    Y [i+1] = X [i+1] ;
-    Y [i+2] = X [i+2] ;
-    Y [i+3] = X [i+3] ;
-  }
-
-  return ;
+void mncblas_scopy_vec(const int N, const float *X, const int incX, float *Y, const int incY){
+  //TODO
 }
+
+/*************************** DCOPY **************************/
+
 
 void mncblas_dcopy_noomp(const int N, const double *X, const int incX, double *Y, const int incY){
   register unsigned int i = 0 ;
@@ -84,6 +65,12 @@ void mncblas_dcopy_omp(const int N, const double *X, const int incX, double *Y, 
   }
   return ;
 }
+
+void mncblas_dcopy_vec(const int N, const double *X, const int incX, double *Y, const int incY){
+  //TODO
+}
+
+/*************************** CCOPY **************************/
 
 void mncblas_ccopy_noomp(const int N, const void *X, const int incX, void *Y, const int incY)
 {
@@ -118,6 +105,8 @@ void mncblas_ccopy_omp(const int N, const void *X, const int incX, void *Y, cons
 void mncblas_ccopy_vec(const int N, const void *X, const int incX, void *Y, const int incY){
   //TODO
 }
+
+/*************************** ZCOPY **************************/
 
 void mncblas_zcopy_noomp(const int N, const void *X, const int incX,void *Y, const int incY)
 {

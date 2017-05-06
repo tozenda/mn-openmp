@@ -115,7 +115,7 @@ int main (int argc, char **argv)
 
       start = _rdtsc () ;
 
-         cblas_sgemm  (
+         cblas_cgemm  (
        MNCblasRowMajor, MNCblasNoTrans,  MNCblasNoTrans,
        MSIZE, MSIZE, MSIZE, 1.0, (float *) A, MSIZE,
        (float *) B, MSIZE, 1.0, (float *) C, MSIZE
@@ -128,7 +128,7 @@ int main (int argc, char **argv)
 
   av = average (experiments) ;
 
-  printf ("cblas_sgemm : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,(((double) MSIZE * (double) MSIZE * (double) MSIZE) / ((double) (av - residu) * (double) 0.17)));
+  printf ("cblas_cgemm : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,(((double) MSIZE * (double) MSIZE * (double) MSIZE) / ((double) (av - residu) * (double) 0.17)));
 
 
   for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
@@ -139,7 +139,7 @@ int main (int argc, char **argv)
 
       start = _rdtsc () ;
 
-         mncblas_sgemm_noomp  (
+         mncblas_cgemm_noomp  (
        MNCblasRowMajor, MNCblasNoTrans,  MNCblasNoTrans,
        MSIZE, MSIZE, MSIZE, 1.0, (float *) A, MSIZE,
        (float *) B, MSIZE, 1.0, (float *) C, MSIZE
@@ -152,7 +152,7 @@ int main (int argc, char **argv)
 
   av = average (experiments) ;
 
-  printf ("mncblas_sgemm_noomp : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,(((double) MSIZE * (double) MSIZE * (double) MSIZE) / ((double) (av - residu) * (double) 0.17)));
+  printf ("mncblas_cgemm_noomp : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,(((double) MSIZE * (double) MSIZE * (double) MSIZE) / ((double) (av - residu) * (double) 0.17)));
 
 
   for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
@@ -163,7 +163,7 @@ int main (int argc, char **argv)
 
       start = _rdtsc () ;
 
-          mncblas_sgemm_omp  (
+          mncblas_cgemm_omp  (
        MNCblasRowMajor, MNCblasNoTrans,  MNCblasNoTrans,
        MSIZE, MSIZE, MSIZE, 1.0, (float *) A, MSIZE,
        (float *) B, MSIZE, 1.0, (float *) C, MSIZE
@@ -177,7 +177,7 @@ int main (int argc, char **argv)
   av = average (experiments) ;
 
   // vector_print (vec2) ;
-  printf ("mncblas_sgemm_omp : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,(((double) MSIZE * (double) MSIZE * (double) MSIZE) / ((double) (av - residu) * (double) 0.17)));
+  printf ("mncblas_cgemm_omp : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,(((double) MSIZE * (double) MSIZE * (double) MSIZE) / ((double) (av - residu) * (double) 0.17)));
 
   for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
     {
@@ -187,7 +187,7 @@ int main (int argc, char **argv)
 
       start = _rdtsc () ;
 
-          mncblas_sgemm_vec  (
+          mncblas_cgemm_vec  (
        MNCblasRowMajor, MNCblasNoTrans,  MNCblasNoTrans,
        MSIZE, MSIZE, MSIZE, 1.0, (float *) A, MSIZE,
        (float *) B, MSIZE, 1.0, (float *) C, MSIZE
@@ -201,6 +201,6 @@ int main (int argc, char **argv)
   av = average (experiments) ;
 
   // vector_print (vec2) ;
-  printf ("mncblas_sgemm_vec (vectorisé) : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,(((double) MSIZE * (double) MSIZE * (double) MSIZE) / ((double) (av - residu) * (double) 0.17)));
+  printf ("mncblas_cgemm_vec (vectorisé) : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,(((double) MSIZE * (double) MSIZE * (double) MSIZE) / ((double) (av - residu) * (double) 0.17)));
 
 }
