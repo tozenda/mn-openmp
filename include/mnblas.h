@@ -396,13 +396,30 @@ void mncblas_cgemv_vec (
 	void *Y, const int incY
 ) ;
 
-void mncblas_zgemv (
+void mncblas_zgemv_omp (
 	MNCBLAS_LAYOUT layout,
 	MNCBLAS_TRANSPOSE TransA, const int M, const int N,
 	const void *alpha, const void *A, const int lda,
 	const void *X, const int incX, const void *beta,
 	void *Y, const int incY
 ) ;
+
+void mncblas_zgemv_noomp (
+	MNCBLAS_LAYOUT layout,
+	MNCBLAS_TRANSPOSE TransA, const int M, const int N,
+	const void *alpha, const void *A, const int lda,
+	const void *X, const int incX, const void *beta,
+	void *Y, const int incY
+) ;
+
+void mncblas_zgemv_vec (
+	MNCBLAS_LAYOUT layout,
+	MNCBLAS_TRANSPOSE TransA, const int M, const int N,
+	const void *alpha, const void *A, const int lda,
+	const void *X, const int incX, const void *beta,
+	void *Y, const int incY
+) ;
+
 
 /*
 
@@ -466,7 +483,7 @@ void mncblas_dgemm_noomp (
 ) ;
 
 
-void mncblas_cgemm (
+void mncblas_cgemm_noomp (
 	MNCBLAS_LAYOUT layout, MNCBLAS_TRANSPOSE TransA,
 	MNCBLAS_TRANSPOSE TransB, const int M, const int N,
 	const int K, const void *alpha, const void *A,
@@ -474,7 +491,7 @@ void mncblas_cgemm (
 	const void *beta, void *C, const int ldc
 ) ;
 
-void mncblas_cgemm (
+void mncblas_cgemm_omp (
 	MNCBLAS_LAYOUT layout, MNCBLAS_TRANSPOSE TransA,
 	MNCBLAS_TRANSPOSE TransB, const int M, const int N,
 	const int K, const void *alpha, const void *A,
@@ -482,7 +499,7 @@ void mncblas_cgemm (
 	const void *beta, void *C, const int ldc
 ) ;
 
-void mncblas_cgemm (
+void mncblas_cgemm_vec (
 	MNCBLAS_LAYOUT layout, MNCBLAS_TRANSPOSE TransA,
 	MNCBLAS_TRANSPOSE TransB, const int M, const int N,
 	const int K, const void *alpha, const void *A,
@@ -490,7 +507,7 @@ void mncblas_cgemm (
 	const void *beta, void *C, const int ldc
 ) ;
 
-void mncblas_zgemm (
+void mncblas_zgemm_noomp (
 	MNCBLAS_LAYOUT layout, MNCBLAS_TRANSPOSE TransA,
 	MNCBLAS_TRANSPOSE TransB, const int M, const int N,
 	const int K, const void *alpha, const void *A,
@@ -498,7 +515,7 @@ void mncblas_zgemm (
 	const void *beta, void *C, const int ldc
 ) ;
 
-void mncblas_zgemm (
+void mncblas_zgemm_omp (
 	MNCBLAS_LAYOUT layout, MNCBLAS_TRANSPOSE TransA,
 	MNCBLAS_TRANSPOSE TransB, const int M, const int N,
 	const int K, const void *alpha, const void *A,
@@ -506,7 +523,7 @@ void mncblas_zgemm (
 	const void *beta, void *C, const int ldc
 ) ;
 
-void mncblas_zgemm (
+void mncblas_zgemm_vec (
 	MNCBLAS_LAYOUT layout, MNCBLAS_TRANSPOSE TransA,
 	MNCBLAS_TRANSPOSE TransB, const int M, const int N,
 	const int K, const void *alpha, const void *A,

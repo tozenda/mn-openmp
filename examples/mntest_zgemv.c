@@ -144,7 +144,12 @@ int main (int argc, char **argv)
  unsigned long long start, end ;
  unsigned long long residu ;
  unsigned long long int av ;
-
+ double alpha[2];
+ alpha[0] = 1.0;
+ alpha[1] = 1.0;
+ double beta[2];
+ beta[0] = 1.0;
+ beta[1] = 1.0;
  int exp ;
 
  /* Calcul du residu de la mesure */
@@ -160,7 +165,7 @@ int main (int argc, char **argv)
 
       start = _rdtsc () ;
 
-         cblas_zgemv  (CblasRowMajor, CblasNoTrans, VECSIZE, VECSIZE, 1.0,(double *) A, VECSIZE, (double *) X, 1, 1.0, (double *) Y, 1) ;
+         cblas_zgemv  (CblasRowMajor, CblasNoTrans, VECSIZE, VECSIZE, (void *) alpha,(float *) A, VECSIZE, (float *) X, 1, (void *) beta, (float *) Y, 1) ;
 
       end = _rdtsc () ;
       experiments [exp] = end - start ;
@@ -179,8 +184,7 @@ int main (int argc, char **argv)
 
       start = _rdtsc () ;
 
-      mncblas_zgemv_noomp(CblasRowMajor, CblasNoTrans, VECSIZE, VECSIZE, 1.0,
-			  (double *) A, VECSIZE, (double *) X, 1, 1.0, (double *) Y, 1) ;
+      mncblas_zgemv_noomp(CblasRowMajor, CblasNoTrans, VECSIZE, VECSIZE, (void *) alpha,(float *) A, VECSIZE, (float *) X, 1, (void *) beta, (float *) Y, 1) ;
       end = _rdtsc () ;
       experiments [exp] = end - start ;
     }
@@ -198,8 +202,7 @@ int main (int argc, char **argv)
 
       start = _rdtsc () ;
 
-         mncblas_zgemv_omp(CblasRowMajor, CblasNoTrans, VECSIZE, VECSIZE, 1.0,
-			  (double *) A, VECSIZE, (double *) X, 1, 1.0, (double *) Y, 1) ;
+         mncblas_zgemv_omp(CblasRowMajor, CblasNoTrans, VECSIZE, VECSIZE, (void *) alpha,(float *) A, VECSIZE, (float *) X, 1, (void *) beta, (float *) Y, 1) ;
       end = _rdtsc () ;
       experiments [exp] = end - start ;
     }
@@ -217,8 +220,7 @@ int main (int argc, char **argv)
 
       start = _rdtsc () ;
 
-         mncblas_zgemv_vec(CblasRowMajor, CblasNoTrans, VECSIZE, VECSIZE, 1.0,
-        (double *) A, VECSIZE, (double *) X, 1, 1.0, (double *) Y, 1) ;
+         mncblas_zgemv_vec(CblasRowMajor, CblasNoTrans, VECSIZE, VECSIZE, (void *) alpha,(float *) A, VECSIZE, (float *) X, 1, (void *) beta, (float *) Y, 1) ;
       end = _rdtsc () ;
       experiments [exp] = end - start ;
     }

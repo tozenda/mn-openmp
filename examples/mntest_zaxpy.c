@@ -60,6 +60,9 @@ int main (int argc, char **argv)
   unsigned long long int start, end ;
   unsigned long long int residu ;
   unsigned long long int av ;
+  double alpha[2];
+  alpha[0] = 3.0;
+  alpha[1] = 3.0;
   int exp ;
   printf("Comparaison pour zaxpy entre CBLAS, notre fonction non parallélisée et notre fonction parallelisée\n");
  /* Calcul du residu de la mesure */
@@ -73,7 +76,7 @@ int main (int argc, char **argv)
 
       start = _rdtsc () ;
 
-         cblas_zaxpy (VECSIZE, 3.0, vec1, 1, vec2, 1) ;
+         cblas_zaxpy (VECSIZE,(void *)alpha, vec1, 1, vec2, 1) ;
 
       end = _rdtsc () ;
 
@@ -90,7 +93,7 @@ int main (int argc, char **argv)
 
       start = _rdtsc () ;
 
-         mncblas_zaxpy_vec (VECSIZE, 3.0, vec1, 1, vec2, 1) ;
+         mncblas_zaxpy_vec (VECSIZE,(void *)alpha, vec1, 1, vec2, 1) ;
 
       end = _rdtsc () ;
 
@@ -108,7 +111,7 @@ int main (int argc, char **argv)
 
       start = _rdtsc () ;
 
-         mncblas_zaxpy_noomp (VECSIZE, 3.0, vec1, 1, vec2, 1) ;
+         mncblas_zaxpy_noomp (VECSIZE,(void *)alpha, vec1, 1, vec2, 1) ;
 
       end = _rdtsc () ;
 
@@ -127,7 +130,7 @@ int main (int argc, char **argv)
 
       start = _rdtsc () ;
 
-          mncblas_zaxpy_omp (VECSIZE, 3.0, vec1, 1, vec2, 1) ;
+          mncblas_zaxpy_omp (VECSIZE,(void *)alpha, vec1, 1, vec2, 1) ;
 
       end = _rdtsc () ;
 

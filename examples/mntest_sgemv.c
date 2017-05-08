@@ -167,7 +167,7 @@ int main (int argc, char **argv)
     }
 
   av = average (experiments) ;
-
+  vector_float_print(Y);
   printf ("cblas_sgemv : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,((((double) 4 * (double) VECSIZE) + ((double) 2 * (double) VECSIZE * (double) VECSIZE)) / ((double) (av - residu) * (double) 0.17)));
 
 
@@ -225,7 +225,7 @@ for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
   }
 
 av = average (experiments) ;
-
+vector_float_print(Y);
 // vector_print (vec2) ;
 printf ("mncblas_sgemv_vec (vectorisée) : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,((((double) 4 * (double) VECSIZE) + ((double) 2 * (double) VECSIZE * (double) VECSIZE)) / ((double) (av - residu) * (double) 0.17)));
 }

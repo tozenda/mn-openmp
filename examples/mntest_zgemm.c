@@ -68,6 +68,12 @@ int main (int argc, char **argv)
   unsigned long long int start, end ;
   unsigned long long int residu ;
   unsigned long long int av ;
+  float alpha[2];
+  alpha[0] = 1.0;
+  alpha[1] = 1.0;
+  float beta[2];
+  beta[0] = 1.0;
+  beta[1] = 1.0;
   int exp ;
   printf("Comparaison pour GEMM entre CBLAS, notre fonction non parallélisée, parallélisée et notre fonction parallelisée\n");
  /* Calcul du residu de la mesure */
@@ -85,8 +91,8 @@ int main (int argc, char **argv)
 
          cblas_zgemm  (
        MNCblasRowMajor, MNCblasNoTrans,  MNCblasNoTrans,
-       MSIZE, MSIZE, MSIZE, 1.0, (double *) A, MSIZE,
-       (double *) B, MSIZE, 1.0, (double *) C, MSIZE
+       MSIZE, MSIZE, MSIZE,(void *) alpha, (float *) A, MSIZE,
+       (float *) B, MSIZE,(void *) beta, (float *) C, MSIZE
             ) ;
 
       end = _rdtsc () ;
@@ -109,8 +115,8 @@ int main (int argc, char **argv)
 
          mncblas_zgemm_noomp  (
        MNCblasRowMajor, MNCblasNoTrans,  MNCblasNoTrans,
-       MSIZE, MSIZE, MSIZE, 1.0, (double *) A, MSIZE,
-       (double *) B, MSIZE, 1.0, (double *) C, MSIZE
+       MSIZE, MSIZE, MSIZE,(void *) alpha, (float *) A, MSIZE,
+       (float *) B, MSIZE,(void *) beta, (float *) C, MSIZE
             ) ;
 
       end = _rdtsc () ;
@@ -132,10 +138,10 @@ int main (int argc, char **argv)
       start = _rdtsc () ;
 
           mncblas_zgemm_omp  (
-       MNCblasRowMajor, MNCblasNoTrans,  MNCblasNoTrans,
-       MSIZE, MSIZE, MSIZE, 1.0, (double *) A, MSIZE,
-       (double *) B, MSIZE, 1.0, (double *) C, MSIZE
-            ) ;
+        MNCblasRowMajor, MNCblasNoTrans,  MNCblasNoTrans,
+        MSIZE, MSIZE, MSIZE,(void *) alpha, (float *) A, MSIZE,
+        (float *) B, MSIZE,(void *) beta, (float *) C, MSIZE
+             ) ;
 
       end = _rdtsc () ;
 
@@ -156,10 +162,10 @@ int main (int argc, char **argv)
       start = _rdtsc () ;
 
           mncblas_zgemm_vec  (
-       MNCblasRowMajor, MNCblasNoTrans,  MNCblasNoTrans,
-       MSIZE, MSIZE, MSIZE, 1.0, (double *) A, MSIZE,
-       (double *) B, MSIZE, 1.0, (double *) C, MSIZE
-            ) ;
+        MNCblasRowMajor, MNCblasNoTrans,  MNCblasNoTrans,
+        MSIZE, MSIZE, MSIZE,(void *) alpha, (float *) A, MSIZE,
+        (float *) B, MSIZE,(void *) beta, (float *) C, MSIZE
+             ) ;
 
       end = _rdtsc () ;
 

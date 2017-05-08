@@ -67,6 +67,7 @@ int main (int argc, char **argv)
   start = _rdtsc () ;
   end = _rdtsc () ;
   residu = end - start ;
+  float alpha[2] = {3.0,3.0};
 
   for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
     {
@@ -74,7 +75,7 @@ int main (int argc, char **argv)
 
       start = _rdtsc () ;
 
-         cblas_caxpy (VECSIZE, 3.0, vec1, 1, vec2, 1) ;
+         cblas_caxpy (VECSIZE,(void *) alpha, vec1, 1, vec2, 1) ;
 
       end = _rdtsc () ;
 
@@ -91,7 +92,7 @@ int main (int argc, char **argv)
 
       start = _rdtsc () ;
 
-         mncblas_caxpy_vec (VECSIZE, 3.0, vec1, 1, vec2, 1) ;
+         mncblas_caxpy_vec (VECSIZE,(void *) alpha, vec1, 1, vec2, 1) ;
 
       end = _rdtsc () ;
 
@@ -108,7 +109,7 @@ int main (int argc, char **argv)
 
       start = _rdtsc () ;
 
-         mncblas_caxpy_noomp (VECSIZE, 3.0, vec1, 1, vec2, 1) ;
+         mncblas_caxpy_noomp (VECSIZE,(void *) alpha, vec1, 1, vec2, 1) ;
 
       end = _rdtsc () ;
 
@@ -127,7 +128,7 @@ int main (int argc, char **argv)
 
       start = _rdtsc () ;
 
-          mncblas_caxpy_omp (VECSIZE, 3.0, vec1, 1, vec2, 1) ;
+          mncblas_caxpy_omp (VECSIZE,(void *)alpha, vec1, 1, vec2, 1) ;
 
       end = _rdtsc () ;
 

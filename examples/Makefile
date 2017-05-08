@@ -2,15 +2,12 @@ SWAP = mntest_sswap mntest_dswap mntest_cswap mntest_zswap
 COPY = mntest_scopy mntest_dcopy mntest_ccopy mntest_zcopy
 DOT = mntest_sdot mntest_ddot mntest_cdotc_sub mntest_cdotu_sub mntest_zdotc_sub mntest_zdotu_sub
 SWAP = mntest_sswap mntest_dswap mntest_cswap mntest_zswap
-AXPY = mntest_saxpy mntest_daxpy
-# mntest_caxpy mntest_zaxpy
-GEMV = mntest_sgemv mntest_dgemv
-# mntest_cgemv mntest_zgemv
-GEMM = mntest_sgemm mntest_dgemm
-# mntest_cgemm mntest_zgemm
+AXPY = mntest_saxpy mntest_daxpy mntest_caxpy mntest_zaxpy
+GEMV = mntest_sgemv mntest_dgemv mntest_cgemv mntest_zgemv
+GEMM = mntest_sgemm mntest_dgemm mntest_cgemm mntest_zgemm
 
-# BINARIES= $(SWAP) $(COPY) $(DOT) $(AXPY) $(GEMV) $(GEMM)
-BINARIES = $(DOT)
+ BINARIES= $(SWAP) $(COPY) $(DOT) $(AXPY) $(GEMV) $(GEMM)
+# BINARIES = $(GEMM)
 
 all: $(BINARIES) clean_o
 

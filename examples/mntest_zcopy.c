@@ -9,9 +9,11 @@
 #include <x86intrin.h>
 
 #define NBEXPERIMENTS    102
+//#define NBEXPERIMENTS    10
+
 static long long unsigned int experiments [NBEXPERIMENTS] ;
 
- //#define VECSIZE    64
+// #define VECSIZE    64
  //#define VECSIZE    1000
 #define VECSIZE    1048576
 
@@ -83,7 +85,7 @@ int main (int argc, char **argv)
 
   av = average (experiments) ;
 
-  printf ("cblas_ccopy : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,((((double) VECSIZE)) / ((double) (av - residu) * (double) 0.17)));
+  printf ("cblas_ccopy : nombre de cycles: \t %Ld ;\t Go/s :\t %3.3f\n ", av-residu,((((double) VECSIZE)) / ((double) (av - residu) * (double) 0.17)));
 */
 
   for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
@@ -101,7 +103,7 @@ int main (int argc, char **argv)
 
   av = average (experiments) ;
 
-  printf ("mncblas_zcopy_noomp : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,((((double) VECSIZE)) / ((double) (av - residu) * (double) 0.17)));
+  printf ("mncblas_zcopy_noomp : nombre de cycles: \t %Ld ;\t Go/s :\t %3.3f\n ", av-residu,((((double) VECSIZE) * (double) sizeof(double)) / ((double) (av - residu) * (double) 0.17)));
 
 
   for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
@@ -121,12 +123,12 @@ int main (int argc, char **argv)
   av = average (experiments) ;
 
   // vector_print (vec2) ;
-  printf ("mncblas_zcopy_omp : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,((((double) VECSIZE)) / ((double) (av - residu) * (double) 0.17)));
+  printf ("mncblas_zcopy_omp : nombre de cycles: \t %Ld ;\t Go/s :\t %3.3f\n ", av-residu,((((double) VECSIZE) * (double) sizeof(double)) / ((double) (av - residu) * (double) 0.17)));
 
   for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
     {
       vector_init (vec1, 1.0) ;
-      vector_init (vec2, 2.0) ;
+      vector_init (vec2, 9.0) ;
 
       start = _rdtsc () ;
 
@@ -138,6 +140,7 @@ int main (int argc, char **argv)
     }
 
   av = average (experiments) ;
-  printf ("mncblas_zcopy_vec : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,((((double) VECSIZE)) / ((double) (av - residu) * (double) 0.17)));
+
+  printf ("mncblas_zcopy_vec : nombre de cycles: \t %Ld ;\t Go/s :\t %3.3f\n ", av-residu,((((double) VECSIZE) * (double) sizeof(double)) / ((double) (av - residu) * (double) 0.17)));
 
 }
