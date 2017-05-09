@@ -137,7 +137,7 @@ void   mncblas_cdotu_sub_omp(const int N, const void *X, const int incX,
   float *y = (float *)Y;
   float *dot = (float *)dotu;
 
-  #pragma omp for schedule(static) private(i)
+  #pragma omp for schedule(static)
   for (i=0; i < N ; i += 1){
     if((i*(incX+incY))%2==1){
       if(i*incX%2==1)
@@ -160,25 +160,33 @@ void   mncblas_cdotu_sub_vec(const int N, const void *X, const int incX,
   // float *dot = (float *)dotu;
 
   // __m128 x1, y1, d0, d1;
-  // d0 = _mm_load_ps(0.0);
-  // d1 = _mm_load_ps(0.0);
+  // float alpha[1] = {0.0};
+  // d0 = _mm_load_ps(dot);
+  // d1 = _mm_load_ps(dot);
 
+  // printf("Les valeurs sont initialisés\n");
   // #pragma omp for schedule(static) private(i)
   // for (i=0; i < N ; i += 1){
   //   x1 = _mm_load_ps (x+i*incX) ;
   //   y1 = _mm_load_ps (y+i*incY) ;
   //   y1 = _mm_mul_ps (x1, y1) ;
+  //   printf("Initialisation dans le for\n");
   //   if((i*(incX+incY))%2==1){
   //     if(i*incX%2==1)
   //       d0 = _mm_add_ps (d0, y1) ;
   //     else
-  //       d0 = mm_sub_ps (d0, y1) ;
+  //       d0 = _mm_sub_ps (d0, y1) ;
   //     }
   //   else{
-  //     d1 = mm_add_ps(d1, y1);
+  //     d1 = _mm_add_ps(d1, y1);
   //   }
   // }
-  // _mm_store_pd (dot, y1) ;
+  // printf("On sort du for\n");
+  // float *tmp;
+  // _mm_store_ps (tmp, d0) ;
+  // dot[0] = *tmp;
+  // _mm_store_ps(tmp, d1);
+  // dot[1] = *tmp;
 }
 
 /*************************** CDOTC_SUB **************************/

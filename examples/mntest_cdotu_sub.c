@@ -60,7 +60,8 @@ int main (int argc, char **argv)
   unsigned long long int residu ;
   unsigned long long int av ;
   int exp ;
-  vector_init (vecres, 1.0);
+  vector_init (vecres, 0.0);
+  // float vecres[2] = {0.0, 0.0};
   printf("Comparaison pour DOT entre CBLAS, notre fonction non parallélisée et notre fonction parallelisée\n");
  /* Calcul du residu de la mesure */
   start = _rdtsc () ;
