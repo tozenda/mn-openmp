@@ -165,7 +165,7 @@ int main (int argc, char **argv)
 
       start = _rdtsc () ;
 
-         cblas_cgemv  (CblasRowMajor, CblasNoTrans, VECSIZE, VECSIZE, (void *) alpha,(float *) A, VECSIZE, (float *) X, 1, (void *) beta, (float *) Y, 1) ;
+         cblas_cgemv  (CblasRowMajor, CblasNoTrans, VECSIZE/2, VECSIZE/2, (void *) alpha,(float *) A, VECSIZE, (float *) X, 1, (void *) beta, (float *) Y, 1) ;
 
       end = _rdtsc () ;
       experiments [exp] = end - start ;
@@ -175,7 +175,7 @@ int main (int argc, char **argv)
 
   printf ("cblas_cgemv : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,((((double) 4 * (double) VECSIZE) + ((double) 2 * (double) VECSIZE * (double) VECSIZE)) / ((double) (av - residu) * (double) 0.17)));
 
-
+/*
   for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
     {
       vector_float_init (X, 1.0) ;
@@ -230,4 +230,5 @@ av = average (experiments) ;
 
 // vector_print (vec2) ;
 printf ("mncblas_cgemv_vec (vectorisée) : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,((((double) 4 * (double) VECSIZE) + ((double) 2 * (double) VECSIZE * (double) VECSIZE)) / ((double) (av - residu) * (double) 0.17)));
+*/
 }

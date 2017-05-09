@@ -1,0 +1,12 @@
+Bonjour, ou Bonsoir,
+
+Pour compiler et executer :
+
+-> Se placer dans examples
+-> Commande :
+    ->  cd ../src/ && make && cd ../examples/ && make
+-> Tous les fichiers de tests sont dans examples.
+
+Bien cordialement,
+
+FERREIRA Joffrey & OZENDA Thomas

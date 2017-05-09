@@ -121,7 +121,7 @@ void mncblas_dswap_omp(const int N, double *X, const int incX,double *Y, const i
   }
 }
 
-/*************************** SSWAP **************************/
+/*************************** CSWAP **************************/
 
 void mncblas_cswap_vec(const int N, void *X, const int incX, void *Y, const int incY)
 {
@@ -134,7 +134,7 @@ void mncblas_cswap_vec(const int N, void *X, const int incX, void *Y, const int 
   float *b = (float *)Y;
 
   #pragma omp for schedule(static) private(incx, incy)
-  for (i=0;i < N;i += 4)
+  for (i=0;i < 2*N;i += 4)
   {
     incx = i*incX;
     incy = i*incY;
@@ -155,7 +155,7 @@ void mncblas_cswap_noomp(const int N, void *X, const int incX,void *Y, const int
   float *x = (float *)X;
   float *y = (float *)Y;
 
-  for (i=0;i < N;i += 1)
+  for (i=0;i < 2*N;i += 1)
   {
     incx = i*incX;
     incy = i*incY;
@@ -176,7 +176,7 @@ void mncblas_cswap_omp(const int N, void *X, const int incX,void *Y, const int i
   float *y = (float *)Y;
 
   #pragma omp for schedule(static) private(save, incx, incy)
-  for (i=0;i < N;i += 1)
+  for (i=0;i < 2*N;i += 1)
   {
     incx = i*incX;
     incy = i*incY;
@@ -198,7 +198,7 @@ void mncblas_zswap_noomp(const int N, void *X, const int incX,void *Y, const int
   double *x = (double *)X;
   double *y = (double *)Y;
 
-  for (i=0;i < N;i += 1)
+  for (i=0;i < 2*N;i += 1)
   {
     incx = i*incX;
     incy = i*incY;
@@ -219,7 +219,7 @@ void mncblas_zswap_omp(const int N, void *X, const int incX,void *Y, const int i
   double *y = (double *)Y;
 
   #pragma omp for schedule(static) private(save, incx, incy)
-  for (i=0;i < N;i += 1)
+  for (i=0;i < 2*N;i += 1)
   {
     incx = i*incX;
     incy = i*incY;
@@ -241,7 +241,7 @@ void mncblas_zswap_vec(const int N, void *X, const int incX,void *Y, const int i
   double *b = (double *)Y;
 
   #pragma omp for schedule(static) private(incx, incy)
-  for (i=0;i < N;i += 2)
+  for (i=0;i < 2*N;i += 2)
   {
     incx = i*incX;
     incy = i*incY;

@@ -74,7 +74,7 @@ int main (int argc, char **argv)
 
       start = _rdtsc () ;
 
-         cblas_cdotu_sub (VECSIZE, vec1, 1, vec2, 1, vecres) ;
+         cblas_cdotu_sub (VECSIZE/2, vec1, 1, vec2, 1, vecres) ;
 
       end = _rdtsc () ;
 
@@ -85,7 +85,7 @@ int main (int argc, char **argv)
 
   printf ("cblas_cdotu_sub : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,((((double) 2 * (double) VECSIZE)) / ((double) (av - residu) * (double) 0.17)));
 
-  for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
+  /*for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
     {
       vector_init (vec1, 1.0) ;
 
@@ -101,7 +101,7 @@ int main (int argc, char **argv)
   av = average (experiments) ;
 
   printf ("mncblas_cdotu_sub_vec : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,((((double) 2 * (double) VECSIZE)) / ((double) (av - residu) * (double) 0.17)));
-
+*/
 
   for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
     {
@@ -109,7 +109,7 @@ int main (int argc, char **argv)
 
       start = _rdtsc () ;
 
-         mncblas_cdotu_sub_noomp (VECSIZE, vec1, 1, vec2, 1, vecres) ;
+         mncblas_cdotu_sub_noomp (VECSIZE/2, vec1, 1, vec2, 1, vecres) ;
 
       end = _rdtsc () ;
 
@@ -128,7 +128,7 @@ int main (int argc, char **argv)
 
       start = _rdtsc () ;
 
-          mncblas_cdotu_sub_omp (VECSIZE, vec1, 1, vec2, 1, vecres) ;
+          mncblas_cdotu_sub_omp (VECSIZE/2, vec1, 1, vec2, 1, vecres) ;
 
       end = _rdtsc () ;
 

@@ -91,8 +91,8 @@ int main (int argc, char **argv)
 
          cblas_zgemm  (
        MNCblasRowMajor, MNCblasNoTrans,  MNCblasNoTrans,
-       MSIZE, MSIZE, MSIZE,(void *) alpha, (float *) A, MSIZE,
-       (float *) B, MSIZE,(void *) beta, (float *) C, MSIZE
+       MSIZE/2, MSIZE/2, MSIZE/2,(void *) alpha, (float *) A, MSIZE/2,
+       (float *) B, MSIZE/2,(void *) beta, (float *) C, MSIZE/2
             ) ;
 
       end = _rdtsc () ;
@@ -104,7 +104,7 @@ int main (int argc, char **argv)
 
   printf ("cblas_zgemm : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,(((double) MSIZE * (double) MSIZE * (double) MSIZE) / ((double) (av - residu) * (double) 0.17)));
 
-
+/*
   for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
     {
       matrix_double_init (A, 1.0) ;
@@ -176,5 +176,5 @@ int main (int argc, char **argv)
 
   // vector_print (vec2) ;
   printf ("mncblas_zgemm_vec (vectorisé) : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,(((double) MSIZE * (double) MSIZE * (double) MSIZE) / ((double) (av - residu) * (double) 0.17)));
-
+*/
 }

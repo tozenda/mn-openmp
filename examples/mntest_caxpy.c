@@ -84,8 +84,7 @@ int main (int argc, char **argv)
   av = average (experiments) ;
   //vector_print (vec2) ;
 
-  // printf ("cblas_caxpy : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,(((double) 8 * (double) VECSIZE) / ((double) (av - residu) * (double) 0.17)));
-  vector_print(vec2);
+   printf ("cblas_caxpy : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,(((double) 8 * (double) VECSIZE) / ((double) (av - residu) * (double) 0.17)));
 
   for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
     {
@@ -102,8 +101,8 @@ int main (int argc, char **argv)
 
   av = average (experiments) ;
 
-  // printf ("mncblas_caxpy_vec : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,(((double) 8 * (double) VECSIZE) / ((double) (av - residu) * (double) 0.17)));
-  vector_print(vec2);
+   printf ("mncblas_caxpy_vec : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,(((double) 8 * (double) VECSIZE) / ((double) (av - residu) * (double) 0.17)));
+
 
   for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
     {
@@ -120,8 +119,7 @@ int main (int argc, char **argv)
 
   av = average (experiments) ;
 
-  // printf ("mncblas_caxpy_noomp : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,(((double) 8 * (double) VECSIZE) / ((double) (av - residu) * (double) 0.17)));
-  vector_print(vec2);
+   printf ("mncblas_caxpy_noomp : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,(((double) 8 * (double) VECSIZE) / ((double) (av - residu) * (double) 0.17)));
 
   for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
     {
@@ -141,8 +139,7 @@ int main (int argc, char **argv)
 
   //vector_print(vec2);
 
-  // printf ("mncblas_caxpy_omp : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,(((double) 8 * (double) VECSIZE) / ((double) (av - residu) * (double) 0.17)));
-  vector_print(vec2);
+   printf ("mncblas_caxpy_omp : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,(((double) 8 * (double) VECSIZE) / ((double) (av - residu) * (double) 0.17)));
 
 
 }

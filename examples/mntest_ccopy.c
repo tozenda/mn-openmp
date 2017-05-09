@@ -67,14 +67,14 @@ int main (int argc, char **argv)
   end = _rdtsc () ;
   residu = end - start ;
 
-  /*for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
+  for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
     {
       vector_init (vec1, 1.0) ;
 //      vector_print(vec1);
 
       start = _rdtsc () ;
 
-         cblas_ccopy (VECSIZE, vec1, 1, vec2, 1) ;
+         cblas_ccopy (VECSIZE/2, vec1, 1, vec2, 1) ;
 
       end = _rdtsc () ;
 
@@ -84,7 +84,7 @@ int main (int argc, char **argv)
   av = average (experiments) ;
 
   printf ("cblas_ccopy : nombre de cycles: \t %Ld ;\t Go/s :\t %3.3f\n ", av-residu,((((double) VECSIZE)) / ((double) (av - residu) * (double) 0.17)));
-*/
+
 
   for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
     {
@@ -92,7 +92,7 @@ int main (int argc, char **argv)
 
       start = _rdtsc () ;
 
-         mncblas_ccopy_noomp (VECSIZE, vec1, 1, vec2, 1) ;
+         mncblas_ccopy_noomp (VECSIZE/2, vec1, 1, vec2, 1) ;
 
       end = _rdtsc () ;
 
@@ -111,7 +111,7 @@ int main (int argc, char **argv)
 
       start = _rdtsc () ;
 
-          mncblas_ccopy_omp (VECSIZE, vec1, 1, vec2, 1) ;
+          mncblas_ccopy_omp (VECSIZE/2, vec1, 1, vec2, 1) ;
 
       end = _rdtsc () ;
 

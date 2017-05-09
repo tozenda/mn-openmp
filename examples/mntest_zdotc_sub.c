@@ -73,7 +73,7 @@ int main (int argc, char **argv)
 
       start = _rdtsc () ;
 
-         cblas_zdotc_sub (VECSIZE, vec1, 1, vec2, 1, vecres) ;
+         cblas_zdotc_sub (VECSIZE/2, vec1, 1, vec2, 1, vecres) ;
 
       end = _rdtsc () ;
 
@@ -90,7 +90,7 @@ int main (int argc, char **argv)
 
       start = _rdtsc () ;
 
-         mncblas_zdotc_sub_vec (VECSIZE, vec1, 1, vec2, 1, vecres) ;
+         mncblas_zdotc_sub_vec (VECSIZE/2, vec1, 1, vec2, 1, vecres) ;
 
       end = _rdtsc () ;
 
@@ -108,7 +108,7 @@ int main (int argc, char **argv)
 
       start = _rdtsc () ;
 
-         mncblas_zdotc_sub_noomp (VECSIZE, vec1, 1, vec2, 1, vecres) ;
+         mncblas_zdotc_sub_noomp (VECSIZE/2, vec1, 1, vec2, 1, vecres) ;
 
       end = _rdtsc () ;
 
@@ -127,7 +127,7 @@ int main (int argc, char **argv)
 
       start = _rdtsc () ;
 
-          mncblas_zdotc_sub_omp (VECSIZE, vec1, 1, vec2, 1, vecres) ;
+          mncblas_zdotc_sub_omp (VECSIZE/2, vec1, 1, vec2, 1, vecres) ;
 
       end = _rdtsc () ;
 

@@ -117,7 +117,7 @@ void   mncblas_cdotu_sub_noomp(const int N, const void *X, const int incX,
   float *y = (float *)Y;
   float *dot = (float *)dotu;
 
-  for (; ((i < N) && (j < N)) ; i += incX, j+=incY){
+  for (; ((i <2* N) && (j <2* N)) ; i += incX, j+=incY){
     if((i+j)%2==1){
       if(i%2==1)
         dot[0] = dot[0] + (x[i] * y[j]);
@@ -139,7 +139,7 @@ void   mncblas_cdotu_sub_omp(const int N, const void *X, const int incX,
   float *dot = (float *)dotu;
 
   #pragma omp for schedule(static)
-  for (i=0; i < N ; i += 1){
+  for (i=0; i < 2*N ; i += 1){
     if((i*(incX+incY))%2==1){
       if(i*incX%2==1)
         dot[0] = dot[0] + (x[i*incX] * y[i*incY]);
@@ -207,7 +207,7 @@ void   mncblas_cdotc_sub_vec(const int N, const void *X, const int incX,
   __m128 x1, y1, d;
 
   #pragma omp parallel for schedule (static) private(x1, y1, d)
-  for (i=0;i<N;i += 4){
+  for (i=0;i<2*N;i += 4){
     x1 = _mm_load_ps (x+i) ;
     y1 = _mm_load_ps (y+i) ;
     y1 = _mm_mul_ps (x1, y1) ;
@@ -225,7 +225,7 @@ void   mncblas_cdotc_sub_omp(const int N, const void *X, const int incX,
   float *dot = (float *)dotc;
 
   #pragma omp parallel for schedule (static)
-  for (i=0;i<N;i += 1){
+  for (i=0;i<2*N;i += 1){
     if(i*(incX+incY)%2==1){
       dot[0] = dot[0] + (x[i*incX] * y[i*incY]);
     }
@@ -247,7 +247,7 @@ void   mncblas_cdotc_sub_noomp(const int N, const void *X, const int incX,
   float *y = (float *)Y;
   float *dot = (float *)dotc;
 
-  for (; ((i < N) && (j < N)) ; i += incX, j+=incY){
+  for (; ((i < 2*N) && (j < 2*N)) ; i += incX, j+=incY){
     if((i+j)%2==1){
       dot[0] = dot[0] + (x[i] * y[j]);
     }
@@ -271,7 +271,7 @@ void   mncblas_zdotu_sub_noomp(const int N, const void *X, const int incX,
   double *y = (double *)Y;
   double *dot = (double *)dotu;
 
-  for (; ((i < N) && (j < N)) ; i += incX, j+=incY){
+  for (; ((i < 2*N) && (j < 2*N)) ; i += incX, j+=incY){
     if((i+j)%2==1){
       if(i%2==1)
         dot[0] = dot[0] + (x[i] * y[j]);
@@ -292,7 +292,7 @@ void   mncblas_zdotu_sub_omp(const int N, const void *X, const int incX,
   double *y = (double *)Y;
   double *dot = (double *)dotu;
 
-  for (i ; i < N ; i += 1){
+  for (i ; i < 2*N ; i += 1){
     if((i*(incX+incY))%2==1){
       if(i*incX%2==1)
         dot[0] = dot[0] + (x[i*incX] * y[i*incY]);
@@ -316,7 +316,7 @@ void   mncblas_zdotu_sub_omp(const int N, const void *X, const int incX,
   __m128d x1, y1;
 
   #pragma omp parallel for schedule (static) private(x1, y1)
-  for (i=0;i<N;i += 4){
+  for (i=0;i<2*N;i += 4){
     x1 = _mm_load_pd (x+i*incX) ;
     y1 = _mm_load_pd (y+i*incY) ;
     y1 = _mm_mul_pd (x1, y1) ;
@@ -334,7 +334,7 @@ void   mncblas_zdotc_sub_noomp(const int N, const void *X, const int incX,
   double *y = (double *)Y;
   double *dot = (double *)dotc;
 
-  for (i ; i < N ; i += 1){
+  for (i ; i < 2*N ; i += 1){
     if(i*(incX+incY)%2==1){
       dot[0] = dot[0] + (x[i*incX] * y[i*incY]);
     }
@@ -356,7 +356,7 @@ void   mncblas_zdotc_sub_omp(const int N, const void *X, const int incX,
   double *dot = (double *)dotc;
 
   #pragma omp parallel for private(i)
-  for (i=0 ; i < N ; i += 1){
+  for (i=0 ; i < 2*N ; i += 1){
     if(i*(incX+incY)%2==1){
       dot[0] = dot[0] + (x[i*incX] * y[i*incY]);
     }
@@ -380,7 +380,7 @@ void   mncblas_zdotc_sub_vec(const int N, const void *X, const int incX,
   __m128d x1, y1;
 
   #pragma omp parallel for schedule (static) private(x1, y1)
-  for (i=0;i<N;i += 4){
+  for (i=0;i<2*N;i += 4){
     x1 = _mm_load_pd (x+i*incX) ;
     y1 = _mm_load_pd (y+i*incY) ;
     y1 = _mm_mul_pd (x1, y1) ;
