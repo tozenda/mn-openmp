@@ -7,7 +7,7 @@ GEMV = mntest_sgemv mntest_dgemv mntest_cgemv mntest_zgemv
 GEMM = mntest_sgemm mntest_dgemm mntest_cgemm mntest_zgemm
 
  #BINARIES= $(SWAP) $(COPY) $(DOT) $(AXPY) $(GEMV) $(GEMM)
- BINARIES = $(AXPY)
+ BINARIES = $(DOT)
 
 all: $(BINARIES) clean_o
 

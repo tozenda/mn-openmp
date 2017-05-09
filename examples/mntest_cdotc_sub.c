@@ -12,7 +12,7 @@
 static long long unsigned int experiments [NBEXPERIMENTS] ;
 
 // #define VECSIZE    32
-#define VECSIZE    1048576
+ #define VECSIZE    1048576
 
 typedef float vfloat  [VECSIZE] __attribute__ ((aligned (16))) ;
 typedef float vdouble [VECSIZE] __attribute__ ((aligned (16))) ;
@@ -70,10 +70,10 @@ int main (int argc, char **argv)
   for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
     {
       vector_init (vec1, 1.0) ;
-
+      vector_init (vec2, 3.0) ;
       start = _rdtsc () ;
 
-         cblas_cdotc_sub (VECSIZE, vec1, 1, vec2, 1, vecres) ;
+         cblas_cdotc_sub (VECSIZE/2, vec1, 1, vec2, 1, vecres) ;
 
       end = _rdtsc () ;
 
@@ -87,10 +87,10 @@ int main (int argc, char **argv)
   for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
     {
       vector_init (vec1, 1.0) ;
-
+      vector_init (vec2, 3.0) ;
       start = _rdtsc () ;
 
-         mncblas_cdotc_sub_vec (VECSIZE, vec1, 1, vec2, 1, vecres) ;
+         mncblas_cdotc_sub_vec (VECSIZE/2, vec1, 1, vec2, 1, vecres) ;
 
       end = _rdtsc () ;
 
@@ -105,10 +105,10 @@ int main (int argc, char **argv)
   for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
     {
       vector_init (vec1, 1.0) ;
-
+      vector_init (vec2, 3.0) ;
       start = _rdtsc () ;
 
-         mncblas_cdotc_sub_noomp (VECSIZE, vec1, 1, vec2, 1, vecres) ;
+         mncblas_cdotc_sub_noomp (VECSIZE/2, vec1, 1, vec2, 1, vecres) ;
 
       end = _rdtsc () ;
 
@@ -116,18 +116,17 @@ int main (int argc, char **argv)
     }
 
   av = average (experiments) ;
-
+  //vector_print(vec2);
   printf ("mncblas_cdotc_sub_noomp : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,((((double) 2 * (double) VECSIZE)) / ((double) (av - residu) * (double) 0.17)));
 
 
   for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
     {
       vector_init (vec1, 1.0) ;
-      vector_init (vec2, 2.0) ;
-
+      vector_init (vec2, 3.0) ;
       start = _rdtsc () ;
 
-          mncblas_cdotc_sub_omp (VECSIZE, vec1, 1, vec2, 1, vecres) ;
+          mncblas_cdotc_sub_omp (VECSIZE/2, vec1, 1, vec2, 1, vecres) ;
 
       end = _rdtsc () ;
 
@@ -136,7 +135,6 @@ int main (int argc, char **argv)
 
   av = average (experiments) ;
 
-  // vector_print (vec2) ;
   printf ("mncblas_cdotc_sub_omp : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,((((double) 2 * (double) VECSIZE)) / ((double) (av - residu) * (double) 0.17)));
 
 
