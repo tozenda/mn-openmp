@@ -171,25 +171,42 @@ void mncblas_caxpy_vec (const int N, const void *alpha, const void *X, const int
 	register unsigned int i ;
 	register unsigned int j ;
 
-	float4 alpha4 ;
+	float4 alphaA ;
+	float4 alphaB ;
 
-	__m128 x1, x2, y1, y2 ;
+	__m128 x1, x2, y1, y2 , x3, x4, x5;
 	__m128 alpha1;
+	__m128 alpha2;
 
-	alpha4 [0] = *a;
-	alpha4 [1] = *a;
-	alpha4 [2] = *a;
-	alpha4 [3] = *a;
+	alphaA [0] = a[0];
+	alphaA [1] = a[0];
+	alphaA [2] = a[0];
+	alphaA [3] = a[0];
 
-	alpha1 = _mm_load_ps (alpha4) ;
+	alphaB [0] = a[1];
+	alphaB [1] = a[1];
+	alphaB [2] = a[1];
+	alphaB [3] = a[1];
+
+	float w[2*N];
+	for (int i = 0; i < 2*N ; i=i+2){
+		w[i] = -u[i+1];
+		w[i+1] = u[i];
+	}
+
+	alpha1 = _mm_load_ps (alphaA) ;
+	alpha2 = _mm_load_ps (alphaB) ;
 
 	#pragma omp parallel for schedule (static)
-	for (i = 0; i<N; i += 4)
+	for (i = 0; i<2*N; i += 4)
 	{
-		x1 = _mm_load_ps (u+(i*incX)) ;
+		x1 = _mm_load_ps (w+(i*incX)) ;
+		x2 = _mm_load_ps (u+(i*incX)) ;
 		y1 = _mm_load_ps (v+(i*incY)) ;
-		x2 = _mm_mul_ps (x1, alpha1) ;
-		y2 = _mm_add_ps (y1, x2) ;
+		x3 = _mm_mul_ps (x1, alpha1) ;
+		x4  = _mm_mul_ps(x2, alpha2) ;
+		x5 = _mm_add_ps(x3, x4);
+		y2 = _mm_add_ps (y1, x5) ;
 		_mm_store_ps (v+(i*incY), y2) ;
 	}
 }
