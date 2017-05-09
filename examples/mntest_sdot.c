@@ -11,8 +11,8 @@
 #define NBEXPERIMENTS    32
 static long long unsigned int experiments [NBEXPERIMENTS] ;
 
-#define VECSIZE    32
-//#define VECSIZE    1048576
+//#define VECSIZE    32
+#define VECSIZE    1048576
 
 typedef float vfloat  [VECSIZE] __attribute__ ((aligned (16))) ;
 typedef double vdouble [VECSIZE] __attribute__ ((aligned (16))) ;
@@ -85,7 +85,7 @@ int main (int argc, char **argv)
   av = average (experiments) ;
 
   printf ("cblas_sdot : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,((((double) 2 * (double) VECSIZE)) / ((double) (av - residu) * (double) 0.17)));
-  printf("valeur de dot 1 : %f\n", *dot);
+
 
   for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
     {
@@ -104,7 +104,6 @@ int main (int argc, char **argv)
   av = average (experiments) ;
 
   printf ("mncblas_sdot_noomp : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,((((double) 2 * (double) VECSIZE)) / ((double) (av - residu) * (double) 0.17)));
-  printf("valeur de dot 2 : %f\n", *dot);
 
   for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
     {
@@ -124,7 +123,6 @@ int main (int argc, char **argv)
 
   // vector_print (vec2) ;
   printf ("mncblas_sdot_omp : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,((((double) 2 * (double) VECSIZE)) / ((double) (av - residu) * (double) 0.17)));
-  printf("valeur de dot 3 : %f\n", *dot);
 
   for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
     {
@@ -143,7 +141,6 @@ int main (int argc, char **argv)
   av = average (experiments) ;
 
   printf ("mncblas_sdot_vec : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,((((double) 2 * (double) VECSIZE)) / ((double) (av - residu) * (double) 0.17)));
-  printf("valeur de dot 4 : %f\n", *dot);
 
 
 }

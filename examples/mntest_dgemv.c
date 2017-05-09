@@ -8,12 +8,12 @@
 */
 
 #include <x86intrin.h>
-#define NBEXPERIMENTS 10
-//#define NBEXPERIMENTS    252
+//#define NBEXPERIMENTS 10
+#define NBEXPERIMENTS    252
 static long long unsigned int experiments [NBEXPERIMENTS] ;
 
-#define VECSIZE 64
-//#define VECSIZE    512
+//#define VECSIZE 64
+#define VECSIZE    512
 
 typedef double mfloat  [VECSIZE] [VECSIZE] ;
 typedef double mdouble [VECSIZE] [VECSIZE] ;
@@ -168,7 +168,6 @@ int main (int argc, char **argv)
     }
 
   av = average (experiments) ;
-  vector_double_print(Y);
 
   printf ("cblas_dgemv : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,((((double) 4 * (double) VECSIZE) + ((double) 2 * (double) VECSIZE * (double) VECSIZE)) / ((double) (av - residu) * (double) 0.17)));
 
@@ -207,8 +206,6 @@ int main (int argc, char **argv)
 
   av = average (experiments) ;
 
-  vector_double_print(Y);
-
   printf ("mncblas_dgemv_omp : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,((((double) 4 * (double) VECSIZE) + ((double) 2 * (double) VECSIZE * (double) VECSIZE)) / ((double) (av - residu) * (double) 0.17)));
 
   for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
@@ -227,6 +224,5 @@ int main (int argc, char **argv)
 
   av = average (experiments) ;
 
-  vector_double_print(Y);
   printf ("mncblas_dgemv_vec : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,((((double) 4 * (double) VECSIZE) + ((double) 2 * (double) VECSIZE * (double) VECSIZE)) / ((double) (av - residu) * (double) 0.17)));
 }

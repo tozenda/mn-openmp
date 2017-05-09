@@ -27,7 +27,7 @@ void mncblas_saxpy_vec (const int N, const float alpha, const float *X, const in
 
 	alpha1 = _mm_load_ps (alpha4) ;
 
-	#pragma omp parallel for schedule (static)
+	#pragma omp parallel for schedule (static) private(x1,x2,y1,y2,alpha1,i)
 	for (i = 0; i<N; i += 4)
 	{
 		x1 = _mm_load_ps (X+(i*incX)) ;
@@ -84,7 +84,7 @@ void mncblas_daxpy_vec(const int N, const double alpha, const double *X,const in
 
 	alpha1 = _mm_load_pd (alpha2) ;
 
-	#pragma omp parallel for schedule (static)
+	#pragma omp parallel for schedule (static) private(x1,x2,y1,y2,alpha1,i)
 	for (i = 0; i<N; i += 4)
 	{
 		x1 = _mm_load_pd (X+(i*incX)) ;
