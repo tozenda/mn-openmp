@@ -76,7 +76,7 @@ int main (int argc, char **argv)
 
       start = _rdtsc () ;
 
-         cblas_zaxpy (VECSIZE,(void *)alpha, vec1, 1, vec2, 1) ;
+         cblas_zaxpy (VECSIZE/2,(void *)alpha, vec1, 1, vec2, 1) ;
 
       end = _rdtsc () ;
 
@@ -93,7 +93,7 @@ int main (int argc, char **argv)
 
       start = _rdtsc () ;
 
-         mncblas_zaxpy_vec (VECSIZE,(void *)alpha, vec1, 1, vec2, 1) ;
+         mncblas_zaxpy_vec (VECSIZE/2,(void *)alpha, vec1, 1, vec2, 1) ;
 
       end = _rdtsc () ;
 
@@ -111,7 +111,7 @@ int main (int argc, char **argv)
 
       start = _rdtsc () ;
 
-         mncblas_zaxpy_noomp (VECSIZE,(void *)alpha, vec1, 1, vec2, 1) ;
+         mncblas_zaxpy_noomp (VECSIZE/2,(void *)alpha, vec1, 1, vec2, 1) ;
 
       end = _rdtsc () ;
 
@@ -130,7 +130,7 @@ int main (int argc, char **argv)
 
       start = _rdtsc () ;
 
-          mncblas_zaxpy_omp (VECSIZE,(void *)alpha, vec1, 1, vec2, 1) ;
+          mncblas_zaxpy_omp (VECSIZE/2,(void *)alpha, vec1, 1, vec2, 1) ;
 
       end = _rdtsc () ;
 

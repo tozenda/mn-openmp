@@ -129,16 +129,17 @@ void mncblas_caxpy_noomp (const int N, const void *alpha, const void *X, const i
 {
 	register unsigned int i = 0 ;
   	register unsigned int j = 0 ;
-  	float *a = (float *)alpha;
+  	float *alphap = (float *)alpha;
  	float *x = (float *)X;
  	float *y = (float *)Y;
 
-  	for (i=0 ; i < N; i += 4){
-    	y [i*incY] 	   = *a * x[i*incX] 	+ y[i*incY] ;
-		y [(i+1)*incY] = *a * x[(i+1)*incX] + y[(i+1)*incY] ;
-		y [(i+2)*incY] = *a * x[(i+2)*incX] + y[(i+2)*incY] ;
-		y [(i+3)*incY] = *a * x[(i+3)*incX] + y[(i+3)*incY] ;
-  	}
+  	for (i=0 ; i < 2*N; i += 4){
+
+			y[i] = (alphap[0]*x[i]-alphap[1]*x[i+1]) + y[i];
+	    y[i+1] = (alphap[0]*x[i+1]+alphap[1]*x[i]) + y[i+1];
+			y[i+2] = (alphap[0]*x[i+2]-alphap[1]*x[i+3]) + y[i+2];
+			y[i+3] = (alphap[0]*x[i+3]+alphap[1]*x[i+2]) + y[i+3];
+}
 }
 
 void mncblas_caxpy_omp (const int N, const void *alpha, const void *X, const int incX,
@@ -146,16 +147,16 @@ void mncblas_caxpy_omp (const int N, const void *alpha, const void *X, const int
 {
 	register unsigned int i = 0 ;
   	register unsigned int j = 0 ;
-  	float *a = (float *)alpha;
+  	float *alphap = (float *)alpha;
  	float *x = (float *)X;
  	float *y = (float *)Y;
 
  	#pragma omp parallel for schedule (static)
-  	for (i=0 ; i < N; i += 4){
-    	y [i*incY] 	   = *a * x[i*incX]     + y[i*incY] ;
-		y [(i+1)*incY] = *a * x[(i+1)*incX] + y[(i+1)*incY] ;
-		y [(i+2)*incY] = *a * x[(i+2)*incX] + y[(i+2)*incY] ;
-		y [(i+3)*incY] = *a * x[(i+3)*incX] + y[(i+3)*incY] ;
+  	for (i=0 ; i < 2*N; i += 4){
+			y[i] = (alphap[0]*x[i]-alphap[1]*x[i+1]) + y[i];
+	    y[i+1] = (alphap[0]*x[i+1]+alphap[1]*x[i]) + y[i+1];
+			y[i+2] = (alphap[0]*x[i+2]-alphap[1]*x[i+3]) + y[i+2];
+			y[i+3] = (alphap[0]*x[i+3]+alphap[1]*x[i+2]) + y[i+3];
   	}
 }
 
@@ -200,15 +201,15 @@ void mncblas_zaxpy_noomp (const int N, const void *alpha, const void *X, const i
 {
 	register unsigned int i = 0 ;
   	register unsigned int j = 0 ;
-  	double *a = (double *)alpha;
+  	double *alphap = (double *)alpha;
  	double *x = (double *)X;
  	double *y = (double *)Y;
 
-  	for (i=0 ; i < N; i += 4){
-    	y [i*incY] 	   = *a * x[i*incX]     + y[i*incY] ;
-		y [(i+1)*incY] = *a * x[(i+1)*incX] + y[(i+1)*incY] ;
-		y [(i+2)*incY] = *a * x[(i+2)*incX] + y[(i+2)*incY] ;
-		y [(i+3)*incY] = *a * x[(i+3)*incX] + y[(i+3)*incY] ;
+  	for (i=0 ; i < 2*N; i += 4){
+			y[i] = (alphap[0]*x[i]-alphap[1]*x[i+1]) + y[i];
+	    y[i+1] = (alphap[0]*x[i+1]+alphap[1]*x[i]) + y[i+1];
+			y[i+2] = (alphap[0]*x[i+2]-alphap[1]*x[i+3]) + y[i+2];
+			y[i+3] = (alphap[0]*x[i+3]+alphap[1]*x[i+2]) + y[i+3];
   	}
 }
 
@@ -217,16 +218,16 @@ void mncblas_zaxpy_omp (const int N, const void *alpha, const void *X, const int
 {
 	register unsigned int i = 0 ;
   	register unsigned int j = 0 ;
-  	double *a = (double *)alpha;
+  	double *alphap = (double *)alpha;
  	double *x = (double *)X;
  	double *y = (double *)Y;
 
 	#pragma omp parallel for schedule (static)
-  	for (i=0 ; i < N; i += 4){
-    	y [i*incY] 	   = *a * x[i*incX]     + y[i*incY] ;
-		y [(i+1)*incY] = *a * x[(i+1)*incX] + y[(i+1)*incY] ;
-		y [(i+2)*incY] = *a * x[(i+2)*incX] + y[(i+2)*incY] ;
-		y [(i+3)*incY] = *a * x[(i+3)*incX] + y[(i+3)*incY] ;
+  	for (i=0 ; i < 2*N; i += 4){
+			y[i] = (alphap[0]*x[i]-alphap[1]*x[i+1]) + y[i];
+	    y[i+1] = (alphap[0]*x[i+1]+alphap[1]*x[i]) + y[i+1];
+			y[i+2] = (alphap[0]*x[i+2]-alphap[1]*x[i+3]) + y[i+2];
+			y[i+3] = (alphap[0]*x[i+3]+alphap[1]*x[i+2]) + y[i+3];
   	}
 }
 

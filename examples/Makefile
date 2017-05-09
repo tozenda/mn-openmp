@@ -6,8 +6,8 @@ AXPY = mntest_saxpy mntest_daxpy mntest_caxpy mntest_zaxpy
 GEMV = mntest_sgemv mntest_dgemv mntest_cgemv mntest_zgemv
 GEMM = mntest_sgemm mntest_dgemm mntest_cgemm mntest_zgemm
 
- BINARIES= $(SWAP) $(COPY) $(DOT) $(AXPY) $(GEMV) $(GEMM)
-# BINARIES = $(GEMM)
+ #BINARIES= $(SWAP) $(COPY) $(DOT) $(AXPY) $(GEMV) $(GEMM)
+ BINARIES = $(AXPY)
 
 all: $(BINARIES) clean_o
 
@@ -221,7 +221,7 @@ mntest_cgemm.o: mntest_cgemm.c
 mntest_zgemm.o: mntest_zgemm.c
 	gcc $(OPTIONS_COMPIL) -c mntest_zgemm.c
 
-
+################### CLEAN ######################
 
 clean_o:
 	rm -f *.o
