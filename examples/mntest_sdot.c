@@ -8,11 +8,11 @@
 
 #include <x86intrin.h>
 
-#define NBEXPERIMENTS    102
+#define NBEXPERIMENTS    32
 static long long unsigned int experiments [NBEXPERIMENTS] ;
 
-// #define VECSIZE    32
-#define VECSIZE    1048576
+#define VECSIZE    32
+//#define VECSIZE    1048576
 
 typedef float vfloat  [VECSIZE] __attribute__ ((aligned (16))) ;
 typedef double vdouble [VECSIZE] __attribute__ ((aligned (16))) ;
@@ -65,6 +65,8 @@ int main (int argc, char **argv)
   start = _rdtsc () ;
   end = _rdtsc () ;
   residu = end - start ;
+  float *dot = malloc(sizeof(float));
+
 
   for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
     {
@@ -73,7 +75,7 @@ int main (int argc, char **argv)
 
       start = _rdtsc () ;
 
-         cblas_sdot (VECSIZE, vec1, 1, vec2, 1) ;
+         *dot = cblas_sdot (VECSIZE, vec1, 1, vec2, 1) ;
 
       end = _rdtsc () ;
 
@@ -83,7 +85,7 @@ int main (int argc, char **argv)
   av = average (experiments) ;
 
   printf ("cblas_sdot : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,((((double) 2 * (double) VECSIZE)) / ((double) (av - residu) * (double) 0.17)));
-
+  printf("valeur de dot 1 : %f\n", *dot);
 
   for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
     {
@@ -92,7 +94,7 @@ int main (int argc, char **argv)
 
       start = _rdtsc () ;
 
-         mncblas_sdot_noomp (VECSIZE, vec1, 1, vec2, 1) ;
+         *dot = mncblas_sdot_noomp (VECSIZE, vec1, 1, vec2, 1) ;
 
       end = _rdtsc () ;
 
@@ -102,7 +104,7 @@ int main (int argc, char **argv)
   av = average (experiments) ;
 
   printf ("mncblas_sdot_noomp : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,((((double) 2 * (double) VECSIZE)) / ((double) (av - residu) * (double) 0.17)));
-
+  printf("valeur de dot 2 : %f\n", *dot);
 
   for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
     {
@@ -111,7 +113,7 @@ int main (int argc, char **argv)
 
       start = _rdtsc () ;
 
-          mncblas_sdot_omp (VECSIZE, vec1, 1, vec2, 1) ;
+          *dot = mncblas_sdot_omp (VECSIZE, vec1, 1, vec2, 1) ;
 
       end = _rdtsc () ;
 
@@ -122,6 +124,7 @@ int main (int argc, char **argv)
 
   // vector_print (vec2) ;
   printf ("mncblas_sdot_omp : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,((((double) 2 * (double) VECSIZE)) / ((double) (av - residu) * (double) 0.17)));
+  printf("valeur de dot 3 : %f\n", *dot);
 
   for (exp = 0 ; exp < NBEXPERIMENTS; exp++)
     {
@@ -130,7 +133,7 @@ int main (int argc, char **argv)
 
       start = _rdtsc () ;
 
-         mncblas_sdot_vec (VECSIZE, vec1, 1, vec2, 1) ;
+         *dot = mncblas_sdot_vec (VECSIZE, vec1, 1, vec2, 1) ;
 
       end = _rdtsc () ;
 
@@ -140,7 +143,7 @@ int main (int argc, char **argv)
   av = average (experiments) ;
 
   printf ("mncblas_sdot_vec : nombre de cycles: \t %Ld ;\t GFLOP/s :\t %3.3f\n ", av-residu,((((double) 2 * (double) VECSIZE)) / ((double) (av - residu) * (double) 0.17)));
-
+  printf("valeur de dot 4 : %f\n", *dot);
 
 
 }

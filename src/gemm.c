@@ -226,7 +226,7 @@ void mncblas_sgemm_omp (
 	for (i = 0 ; i < M; i = i + 4)
 	{
 		/* i */
-		#pragma omp parallel for schedule(static)
+		#pragma omp parallel for reduction(+:r) schedule(static)
 		for (j = 0 ; j < M; j ++)
 		{
 			r = 0.0 ;
@@ -242,7 +242,7 @@ void mncblas_sgemm_omp (
 		}
 
 		/* i + 1 */
-		#pragma omp parallel for schedule(static)
+		#pragma omp parallel for reduction(+:r) schedule(static)
 		for (j = 0 ; j < M; j ++)
 		{
 			r = 0.0 ;
@@ -258,7 +258,7 @@ void mncblas_sgemm_omp (
 		}
 
 		/* i + 2 */
-		#pragma omp parallel for schedule(static)
+		#pragma omp parallel for reduction(+:r) schedule(static)
 		for (j = 0 ; j < M; j ++)
 		{
 			r = 0.0 ;
@@ -274,7 +274,7 @@ void mncblas_sgemm_omp (
 		}
 
 		/* i + 3 */
-		#pragma omp parallel for schedule(static)
+		#pragma omp parallel for reduction(+:r) schedule(static)
 		for (j = 0 ; j < M; j ++)
 		{
 			r = 0.0 ;
@@ -506,7 +506,7 @@ void mncblas_dgemm_omp(MNCBLAS_LAYOUT layout, MNCBLAS_TRANSPOSE TransA,
 	for (i = 0 ; i < M; i = i + 4)
 	{
 		/* i */
-		#pragma omp parallel for schedule(static)
+		#pragma omp parallel for reduction(+:r) schedule(static)
 		for (j = 0 ; j < M; j ++)
 		{
 			r = 0.0 ;
@@ -522,7 +522,7 @@ void mncblas_dgemm_omp(MNCBLAS_LAYOUT layout, MNCBLAS_TRANSPOSE TransA,
 		}
 
 		/* i + 1 */
-		#pragma omp parallel for schedule(static)
+		#pragma omp parallel for reduction(+:r) schedule(static)
 		for (j = 0 ; j < M; j ++)
 		{
 			r = 0.0 ;
@@ -538,7 +538,7 @@ void mncblas_dgemm_omp(MNCBLAS_LAYOUT layout, MNCBLAS_TRANSPOSE TransA,
 		}
 
 		/* i + 2 */
-		#pragma omp parallel for schedule(static)
+		#pragma omp parallel for reduction(+:r) schedule(static)
 		for (j = 0 ; j < M; j ++)
 		{
 			r = 0.0 ;
@@ -554,7 +554,7 @@ void mncblas_dgemm_omp(MNCBLAS_LAYOUT layout, MNCBLAS_TRANSPOSE TransA,
 		}
 
 		/* i + 3 */
-		#pragma omp parallel for schedule(static)
+		#pragma omp parallel for reduction(+:r) schedule(static)
 		for (j = 0 ; j < M; j ++)
 		{
 			r = 0.0 ;

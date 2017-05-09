@@ -28,7 +28,7 @@ float mncblas_sdot_noomp(const int N, const float *X, const int incX,const float
 float mncblas_sdot_omp(const int N, const float *X, const int incX,const float *Y, const int incY)
 {
   register unsigned int i = 0 ;
-  register float dot = 0.0 ;
+  float dot = 0.0 ;
 
   #pragma omp for schedule(static)
   for (i=0;i<N;i += 1)
@@ -43,19 +43,18 @@ float mncblas_sdot_vec(const int N, const float *X, const int incX,const float *
 {
   register unsigned int i = 0;
   float4 dot;
+  float d = 0.0;
   __m128 x1, y1;
 
-  // printf("Avant for\n");
-  #pragma omp parallel for schedule (static)
-  for (i=0;i<N;i += 4){
+  #pragma omp parallel for reduction(+:d) private(x1, y1)
+  for (i=0; i<N ; i += 4){
     x1 = _mm_load_ps (X+i) ;
     y1 = _mm_load_ps (Y+i) ;
+    y1 = _mm_dp_ps(y1, x1, 0xFF);
+    _mm_store_ps (dot, y1) ;
+    d = d + (*dot);
   }
-  y1 = _mm_dp_ps(y1, x1, 0xFF);
-  // printf("post for\n");
-  _mm_store_ps (dot, y1) ;
-  // printf("post store\n");
-  return dot[0];
+  return(d);
 }
 
 /*************************** DDOT **************************/
@@ -92,17 +91,19 @@ double mncblas_ddot_vec(const int N, const double *X, const int incX, const doub
 {
   register unsigned int i = 0;
   double2 dot;
+  double d = 0.0;
 
   __m128d x1, y1;
 
-  #pragma omp parallel for schedule (static) private(x1, y1)
+  #pragma omp parallel for reduction(+:d) schedule (static) private(x1, y1)
   for (i=0;i<N;i += 4){
     x1 = _mm_load_pd (X+i) ;
     y1 = _mm_load_pd (Y+i) ;
+    y1 = _mm_dp_pd(y1, x1, 0xFF);
+    _mm_store_pd(dot, y1);
+    d = d + *dot;
   }
-  y1 = _mm_dp_pd(y1, x1, 0xFF);
-  _mm_store_pd(dot, y1);
-  return(dot[0]);
+  return(d);
 }
 
 /*************************** CDOTU_SUB **************************/
